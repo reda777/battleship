@@ -1,0 +1,27 @@
+{
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "",
+  "main": "ship.js",
+  "scripts": {
+    "test": "jest",
+    "watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reda777/battleship.git"
+  },
+  "author": "reda777",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reda777/battleship/issues"
+  },
+  "homepage": "https://github.com/reda777/battleship#readme",
+  "devDependencies": {
+    "@babel/core": "^7.20.2",
+    "@babel/preset-env": "^7.20.2",
+    "@types/jest": "^29.2.3",
+    "babel-jest": "^29.3.1",
+    "jest": "^29.3.1"
+  }
+}
