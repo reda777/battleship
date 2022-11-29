@@ -4,7 +4,7 @@ function shipFactory(length){
         hits: 0,
         sunk: false,
         hit(){
-            this.hits+=1;
+            this.hits+=(this.hits==this.length)?0:1;
         },
         isSunk(){
             return this.length-this.hits==0;
