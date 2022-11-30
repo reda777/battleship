@@ -7,21 +7,44 @@ function gbFactory(){
     return {
         board: array2D(10),
         hitCords: [],
-        placeShip(ship,cordA,cordB,cordC,cordD){
+        checkEmptyCoords(cordA,cordB,cordC,cordD){
             if(cordA==cordC){
                 let i=cordB;
                 while(i<=cordD){
-                    this.board[cordA][i]=ship;
+                    if(this.board[cordA][i]!=undefined) return false;
                     i+=1;
                 }
 
             }else if(cordB==cordD){
                 let i=cordA;
                 while(i<=cordC){
-                    this.board[i][cordB]=ship;
+                    if(this.board[i][cordB]!=undefined) return false;
                     i+=1;
                 }
             }
+            return true;
+        },
+        placeShip(ship,cordA,cordB,cordC,cordD){
+            if(this.checkEmptyCoords(cordA,cordB,cordC,cordD)){
+                if(cordA==cordC){
+                    let i=cordB;
+                    while(i<=cordD){
+                        this.board[cordA][i]=ship;
+                        i+=1;
+                    }
+                    return true;
+                }else if(cordB==cordD){
+                    let i=cordA;
+                    while(i<=cordC){
+                        this.board[i][cordB]=ship;
+                        i+=1;
+                    }
+                    return true;
+                }
+            }else{
+                return false;
+            }
+            
         },
         receiveAttack(cordX,cordY){
             let cordArr=[cordX,cordY];
@@ -39,6 +62,16 @@ function gbFactory(){
                 return true;
             }
         },
+        checkAllShipsSunk(){
+            for(let i=0;i<this.board.length;i++){
+                for(let j=0;j<this.board[i].length;j++){
+                    if(this.board[i][j]!=undefined && this.board[i][j].isSunk()==false){
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     }
 }
 module.exports={gbFactory};
