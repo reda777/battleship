@@ -3,7 +3,7 @@ function array2D(n){
     for(let i=0;i<n;i++) arr[i]=[];
     return arr;
 }
-function gbFactory(){
+function Gameboard(){
     return {
         board: array2D(10),
         hitCords: [],
@@ -74,4 +74,4 @@ function gbFactory(){
         }
     }
 }
-module.exports={gbFactory};
+module.exports={Gameboard};

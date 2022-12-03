@@ -1,4 +1,4 @@
-function shipFactory(length){
+function Ship(length){
     return {
         length : length,
         hits: 0,
@@ -11,4 +11,4 @@ function shipFactory(length){
         },
     }
 }
-module.exports={shipFactory};
+module.exports={Ship};
