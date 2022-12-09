@@ -1,6 +1,6 @@
-const gameBoard= require("./gameboard.js");
-const player=require("./player.js");
-const ship=require("./ship.js");
+const gameBoard= require("../gameboard.js");
+const player=require("../player.js");
+const ship=require("../ship.js");
 test("Switching turns",()=>{
     let player1=player.Player(true);
     let player2=player.Player(false);

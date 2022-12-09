@@ -1,0 +1,79 @@
+body{
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+}
+/*left*/
+.left{
+    background-color: gray;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.header{
+    background-color: rgb(126, 126, 182);
+    margin: 6px;
+    width: 85%;
+    height: 150px;
+}
+.gameMode{
+    background-color: bisque;
+    width: 75%;
+    height: 120px;
+    margin: 6px;
+}
+.hideBtn{
+    display: none;
+}
+.pvpBtn{
+    background-color: blueviolet;
+    margin: 8px 0;
+    width: 100%;
+    height: calc(60px - 8px);
+    cursor: pointer;
+}
+.pveBtn{
+    background-color: rgb(71, 44, 8);
+    margin: 8px 0;
+    width: 100%;
+    height: calc(60px - 8px);
+    cursor: pointer;
+}
+.restartBtn{
+    background-color: blueviolet;
+    margin: 8px 0;
+    width: 100%;
+    height: calc(60px - 8px);
+    cursor: pointer;
+}
+.nextBtn{
+    background-color: rgb(71, 44, 8);
+    margin: 8px 0;
+    width: 100%;
+    height: calc(60px - 8px);
+    cursor: pointer;
+}
+/*right*/
+.right{
+    background-color: rgb(146, 146, 146);
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.gameBoard{
+    background-color: aliceblue;
+    display: grid;
+    margin: 10px;
+    grid-template-columns: repeat(10,50px);
+    grid-template-rows: repeat(10,50px);
+}
+.pickShip{
+    background-color: rgb(159, 176, 190);
+    display: grid;
+    grid-template-columns: repeat(2,250px);
+    grid-template-rows: repeat(2,50px);
+}

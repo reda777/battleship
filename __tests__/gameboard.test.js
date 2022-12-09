@@ -1,5 +1,5 @@
-const gameBoard=require("./gameboard.js");
-const ship=require("./ship.js");
+const gameBoard=require("../gameboard.js");
+const ship=require("../ship.js");
 test("Ship placed succefully",()=>{
     const gb=gameBoard.Gameboard();
     const ship1=ship.Ship(5);

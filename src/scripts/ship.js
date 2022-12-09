@@ -11,4 +11,4 @@ function Ship(length){
         },
     }
 }
-module.exports={Ship};
+export {Ship};

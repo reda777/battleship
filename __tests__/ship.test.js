@@ -1,4 +1,4 @@
-const ship=require("./ship.js");
+const ship=require("../ship.js");
 test("Hitting a ship",()=>{
     let ship1=ship.Ship(2);
     ship1.hit();

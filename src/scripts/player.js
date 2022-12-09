@@ -10,4 +10,4 @@ function Player(t,isAI=false){
         },
     }
 }
-module.exports={Player};
+export {Player};

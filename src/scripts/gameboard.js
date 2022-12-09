@@ -3,9 +3,9 @@ function array2D(n){
     for(let i=0;i<n;i++) arr[i]=[];
     return arr;
 }
-function Gameboard(){
+function Gameboard(dim=10){
     return {
-        board: array2D(10),
+        board: array2D(dim),
         hitCords: [],
         checkEmptyCoords(cordA,cordB,cordC,cordD){
             if(cordA==cordC){
@@ -74,4 +74,4 @@ function Gameboard(){
         }
     }
 }
-module.exports={Gameboard};
+export {Gameboard};
