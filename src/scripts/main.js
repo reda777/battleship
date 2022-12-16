@@ -1,7 +1,47 @@
 import { Gameboard } from "./gameboard.js";
 import { Ship } from "./ship.js";
-import { fillGameBoard } from "./siteDOM.js";
-function startGame(){
+import { createGameBoard,createPlayerBoard } from "./siteDOM.js";
+function addEndTurnBtnEvent(playerBoard,enemyBoard){
+    const gameBoardDiv=document.querySelector(".gameBoard");
+    const playerBoardDiv=document.querySelector(".playerBoard");
+    const nextBtn=document.querySelector(".nextBtn");
+    nextBtn.addEventListener("click",()=>{
+        gameBoardDiv.innerHTML='';
+        playerBoardDiv.innerHTML='';
+        createGameBoard(playerBoard);
+        createPlayerBoard(enemyBoard);
+        addSquaresEvents(enemyBoard,playerBoard);
+    },{ once: true });
+}
+function addSquaresEvents(playerBoard,enemyBoard){
+    const gameBoardDiv=document.querySelector(".gameBoard");
+    gameBoardDiv.addEventListener("click",(e)=>{
+        const cords=e.target.dataset.id;
+        enemyBoard.receiveAttack(cords[0],cords[2]);
+        e.target.classList.add("hitSquare");
+        if(enemyBoard.board[cords[0]][cords[2]]!=undefined){
+            addSquaresEvents(playerBoard,enemyBoard);
+        }else{
+            addEndTurnBtnEvent(playerBoard,enemyBoard);
+        }
+    },{ once: true });
+}
+function startGameBtnEvent(playerBoard,enemyBoard){
+    const pvpBtn=document.querySelector(".pvpBtn");
+    const pveBtn=document.querySelector(".pveBtn");
+    const restartBtn=document.querySelector(".restartBtn");
+    const nextBtn=document.querySelector(".nextBtn");
+    pvpBtn.addEventListener("click",()=>{
+        createGameBoard(enemyBoard);
+        createPlayerBoard(playerBoard);
+        pvpBtn.classList.toggle("hideBtn");
+        pveBtn.classList.toggle("hideBtn");
+        restartBtn.classList.toggle("hideBtn");
+        nextBtn.classList.toggle("hideBtn");
+        addSquaresEvents(playerBoard,enemyBoard);
+    },{once:true});
+}
+(function gameLoop(){
     let gb1=Gameboard();
     let gb2=Gameboard();
     //create ships (manually for now)
@@ -9,7 +49,7 @@ function startGame(){
     let battleship=Ship(4);
     let cruiser=Ship(3);
     let destroyer=Ship(2);
-    //place ships
+    //player 1
     gb1.placeShip(carrier,4,9,9,9);
 
     gb1.placeShip(battleship,0,2,0,5);
@@ -32,6 +72,15 @@ function startGame(){
     gb2.placeShip(destroyer,0,0,0,1);
     gb2.placeShip(destroyer,7,0,7,1);
 
-    fillGameBoard(gb1);
-}
-export {startGame};
+    startGameBtnEvent(gb1,gb2);
+    
+
+})();
+//click start
+//make gameboard clickable (once)
+//click the board
+//if square is ship -> make gameboard clickable again(once) check if all ships are sunk
+//else make end turn clickable 
+//click end turn
+//make gameboard clickable 
+//repeat

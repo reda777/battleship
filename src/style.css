@@ -42,14 +42,14 @@ body{
     cursor: pointer;
 }
 .restartBtn{
-    background-color: blueviolet;
+    background-color: rgb(43, 70, 226);
     margin: 8px 0;
     width: 100%;
     height: calc(60px - 8px);
     cursor: pointer;
 }
 .nextBtn{
-    background-color: rgb(71, 44, 8);
+    background-color: rgb(8, 61, 71);
     margin: 8px 0;
     width: 100%;
     height: calc(60px - 8px);
@@ -64,6 +64,20 @@ body{
     justify-content: flex-start;
     align-items: center;
 }
+.boards{
+    background-color: coral;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+.playerBoard{
+    background-color: aliceblue;
+    display: grid;
+    margin: 10px;
+    grid-template-columns: repeat(10,20px);
+    grid-template-rows: repeat(10,20px);
+}
 .gameBoard{
     background-color: aliceblue;
     display: grid;
@@ -76,4 +90,44 @@ body{
     display: grid;
     grid-template-columns: repeat(2,250px);
     grid-template-rows: repeat(2,50px);
+}
+.square{
+    border: 1px solid black;
+    cursor: pointer;
+}
+.square:hover{
+    background-color: rgb(238, 225, 206);
+}
+.playerSquare{
+    border: 1px solid black;
+}
+.hitSquare{
+    position: relative;
+}
+.hitSquare:after{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    content: "\00d7"; /* use the hex value here... */
+    font-size: 80px; 
+    color: rgb(0, 0, 0);
+    line-height: 50px;
+    text-align: center;
+}
+.hitPlayerSquare{
+    position: relative;
+}
+.hitPlayerSquare:after{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    content: "\00d7"; /* use the hex value here... */
+    font-size: 32px; 
+    color: rgb(0, 0, 0);
+    line-height: 18px;
+    text-align: center;
 }
