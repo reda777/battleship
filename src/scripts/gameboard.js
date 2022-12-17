@@ -3,9 +3,10 @@ function array2D(n){
     for(let i=0;i<n;i++) arr[i]=[];
     return arr;
 }
-function Gameboard(dim=10){
+function Gameboard(d=10){
     return {
-        board: array2D(dim),
+        dim: d,
+        board: array2D(d),
         hitCords: [],
         checkEmptyCoords(cordA,cordB,cordC,cordD){
             if(cordA==cordC){
