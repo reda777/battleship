@@ -13,6 +13,5 @@ test("Sending attack",()=>{
     const ship1=Ship(5);
     gb.placeShip(ship1,1,5,5,5);
     let player1=Player(true);
-    player1.sendAttack(gb,1,5);
-    expect(gb.hitCords).toStrictEqual([[1,5]]);
+    expect(player1.sendAttack(gb,1,5)).toBe(true);
 })

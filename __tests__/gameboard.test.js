@@ -13,41 +13,34 @@ test("Ship placed succefully",()=>{
 test("Placing a ship on a used square",()=>{
     const gb=Gameboard();
     const ship1=Ship(5);
-    gb.placeShip(ship1,1,5,5,5);
     const ship2=Ship(3);
+    gb.placeShip(ship1,1,5,5,5);
     expect(gb.placeShip(ship2,3,3,3,6)).toBe(false);
 })
 test("Attack a coordinates",()=>{
     const gb=Gameboard();
     const ship1=Ship(5);
     gb.placeShip(ship1,1,5,5,5);
-    let attack=gb.receiveAttack(2,5);
-    expect(attack).toBe(true);
-    expect(ship1.hits).toBe(1);
+    expect(gb.receiveAttack(2,5)).toBe(true);
     expect(gb.hitCords[0]).toStrictEqual([2,5]);
 })
-test("Attack the same coords again",()=>{
+test("Attack the same coords",()=>{
     const gb=Gameboard();
     const ship1=Ship(5);
     gb.placeShip(ship1,1,5,5,5);
-    let attack=gb.receiveAttack(2,5);
-    expect(attack).toBe(true);
-    expect(ship1.hits).toBe(1);
+    expect(gb.receiveAttack(2,5)).toBe(true);
     expect(gb.hitCords[0]).toStrictEqual([2,5]);
-    let attack2=gb.receiveAttack(2,5);
-    expect(attack2).toBe(false);
-    expect(ship1.hits).toBe(1);
+    expect(gb.receiveAttack(2,5)).toBe(false);
     expect(gb.hitCords.length).toBe(1);
 })
 test("Record missed attacks",()=>{
     const gb=Gameboard();
     const ship1=Ship(5);
     gb.placeShip(ship1,1,5,5,5);
-    let attack=gb.receiveAttack(1,3);
-    expect(attack).toBe(true);
+    expect(gb.receiveAttack(1,3)).toBe(true);
     expect(gb.hitCords[0]).toStrictEqual([1,3]);
 })
-test("Check All Ships Sunk", () => {
+test("Check if all ships sunk", () => {
     const gb = Gameboard();
     const ship1 = Ship(2);
     gb.placeShip(ship1, 1, 5, 1, 6);
@@ -55,8 +48,7 @@ test("Check All Ships Sunk", () => {
     gb.receiveAttack(1, 6);
     expect(gb.checkAllShipsSunk()).toBe(true);
 });
-
-test("Check All Ships Sunk with remaining ships", () => {
+test("checkAllShipsSunk with remaining ships", () => {
     const gb = Gameboard();
     const ship1 = Ship(2);
     const ship2 = Ship(3);
