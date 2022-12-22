@@ -54,7 +54,6 @@ function changeSunkShipColor(gb,ship){
             }
         }
     }
-    console.log(shipArr);
     for(let i=0;i<shipArr.length;i++){
         gameBoardDiv.querySelector(`[data-id="${shipArr[i][0]},${shipArr[i][1]}"]`).style.backgroundColor="grey";
     }
