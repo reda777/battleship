@@ -93,9 +93,12 @@ body{
 }
 .square{
     border: 1px solid black;
+}
+.squareStyled{
+    border: 1px solid black;
     cursor: pointer;
 }
-.square:hover{
+.squareStyled:hover{
     background-color: rgb(238, 225, 206);
 }
 .playerSquare{

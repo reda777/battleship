@@ -14,8 +14,16 @@ function startGameBtnEvent(playerBoard,enemyBoard){
         addSquaresEvents(playerBoard,enemyBoard);
     },{once:true});
 }
+function mouseoverSquare(e){
+    e.target.classList.toggle("squareStyled");
+}
+function mouseoutSquare(e){
+    e.target.classList.toggle("squareStyled");
+}
 function addSquaresEvents(playerBoard,enemyBoard){
     const gameBoardDiv=document.querySelector(".gameBoard");
+    gameBoardDiv.addEventListener('mouseover', mouseoverSquare);
+    gameBoardDiv.addEventListener('mouseout', mouseoutSquare);
     gameBoardDiv.addEventListener("click",(e)=>{
         const cords=e.target.dataset.id;
         enemyBoard.receiveAttack(cords[0],cords[2]);
@@ -28,6 +36,9 @@ function addSquaresEvents(playerBoard,enemyBoard){
             }
             addSquaresEvents(playerBoard,enemyBoard);
         }else{
+            gameBoardDiv.removeEventListener('mouseover', mouseoverSquare);
+            gameBoardDiv.removeEventListener('mouseout', mouseoutSquare);
+            e.target.classList.toggle("squareStyled")
             addEndTurnBtnEvent(playerBoard,enemyBoard);
         }
     },{ once: true });
