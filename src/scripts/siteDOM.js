@@ -1,7 +1,7 @@
-function createGameBoard(gb) {
+function createGameBoard(p) {
     const gameBoard = document.querySelector(".gameBoard");
     let square;
-    let dim=gb.dim;
+    let dim=p.gb.dim;
 
     for (let i = 0; i < dim; i++) {
         for (let j = 0; j < dim; j++) {
@@ -12,11 +12,11 @@ function createGameBoard(gb) {
             
             square.dataset.id = `${i},${j}`;
 
-            if (gb.hitCords.some(cords => cords[0] == i && cords[1] == j)) {
+            if (p.gb.hitCords.some(cords => cords[0] == i && cords[1] == j)) {
                 square.classList.add("hitSquare");
-                if (gb.board[i][j] != undefined) {
+                if (p.gb.board[i][j] != undefined) {
                     square.style.backgroundColor = "red";
-                    if (gb.board[i][j].isSunk()) {
+                    if (p.gb.board[i][j].isSunk()) {
                         square.style.backgroundColor = "grey";
                     }
                 }
@@ -26,11 +26,14 @@ function createGameBoard(gb) {
         }
     }
 }
-
-function createPlayerBoard(gb) {
+function announceWinner(){
+    const gameBoard = document.querySelector(".gameBoard");
+    gameBoard.textContent="YOU WIN";
+}
+function createPlayerBoard(p) {
     const playerBoard = document.querySelector(".playerBoard");
     let playerSquare;
-    let dim=gb.dim;
+    let dim=p.gb.dim;
 
     for (let i = 0; i < dim; i++) {
         for (let j = 0; j < dim; j++) {
@@ -40,14 +43,14 @@ function createPlayerBoard(gb) {
             playerSquare.style.gridRow = j + 1;
             playerSquare.dataset.id = `${i},${j}`;
 
-            if (gb.board[i][j] != undefined) {
+            if (p.gb.board[i][j] != undefined) {
                 playerSquare.style.backgroundColor = "red";
-                if (gb.board[i][j].isSunk()) {
+                if (p.gb.board[i][j].isSunk()) {
                     playerSquare.style.backgroundColor = "grey";
                 }
             }
 
-            if (gb.hitCords.some(cords => cords[0] == i && cords[1] == j)) {
+            if (p.gb.hitCords.some(cords => cords[0] == i && cords[1] == j)) {
                 playerSquare.classList.add("hitPlayerSquare");
             }
 
@@ -56,4 +59,4 @@ function createPlayerBoard(gb) {
     }
 }
 
-export {createGameBoard,createPlayerBoard};
+export {createGameBoard,createPlayerBoard,announceWinner};
