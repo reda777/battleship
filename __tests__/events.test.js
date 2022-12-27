@@ -9,7 +9,7 @@ test("changeSunkShipColor changes ship color in the board",()=>{
     let p=Player(gb1,true);
     const ship=Ship(2);
     document.body.innerHTML=`
-        <div class="gameBoard"></div>
+        <div class="boards"></div>
     `;
     p.gb.placeShip(ship,1,2,1,3);
     createGameBoard(p);

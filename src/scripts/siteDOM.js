@@ -1,5 +1,8 @@
 function createGameBoard(p) {
-    const gameBoard = document.querySelector(".gameBoard");
+    const boards=document.querySelector(".boards");
+    const gameBoard = document.createElement("div");
+    gameBoard.classList.add("gameBoard");
+    boards.appendChild(gameBoard);
     let square;
     let dim=p.gb.dim;
 
@@ -31,7 +34,10 @@ function announceWinner(){
     gameBoard.textContent="YOU WIN";
 }
 function createPlayerBoard(p) {
-    const playerBoard = document.querySelector(".playerBoard");
+    const boards=document.querySelector(".boards");
+    const playerBoard = document.createElement("div");
+    playerBoard.classList.add("playerBoard");
+    boards.appendChild(playerBoard);
     let playerSquare;
     let dim=p.gb.dim;
 

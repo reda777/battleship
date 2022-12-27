@@ -8,7 +8,7 @@ test("createGameBoard create correct number of squares",()=>{
     let p=Player(gb1,true);
     
     document.body.innerHTML = `
-    <div class="gameBoard">
+    <div class="boards">
 
     </div>`;
 
@@ -21,7 +21,7 @@ test("createPlayerBoard create correct number of squares",()=>{
     let gb1=Gameboard();
     let p=Player(gb1,true);
     document.body.innerHTML = `
-    <div class="playerBoard">
+    <div class="boards">
 
     </div>`;
 
@@ -36,7 +36,7 @@ test("createPlayerBoard shows ship squares in red",()=>{
     let ship1=Ship(3);
     p.gb.placeShip(ship1,2,3,2,5);
     document.body.innerHTML = `
-    <div class="playerBoard">
+    <div class="boards">
 
     </div>`;
 
@@ -48,7 +48,7 @@ test("createPlayerBoard shows ship squares in red",()=>{
 
 test("createGameBoard adds correct classes to squares", () => {
     document.body.innerHTML = `
-    <div class="gameBoard">
+    <div class="boards">
 
     </div>`;
     let gb1=Gameboard();
@@ -73,7 +73,7 @@ test("createGameBoard styles sunk squares correctly", () => {
     p.gb.receiveAttack(2, 4);
     p.gb.receiveAttack(2, 5);
     document.body.innerHTML = `
-    <div class="gameBoard">
+    <div class="boards">
 
     </div>`;
 
@@ -90,7 +90,7 @@ test("createPlayerBoard adds correct classes to squares", () => {
     p.gb.placeShip(ship1, 2, 3, 2, 5);
     p.gb.receiveAttack(2, 3);
     document.body.innerHTML = `
-    <div class="playerBoard">
+    <div class="boards">
 
     </div>`;
 
