@@ -7,7 +7,7 @@ import {startGameBtnEvent} from "./events.js";
     let gb1=Gameboard();
     let gb2=Gameboard();
     let p1=Player(gb1,true);
-    let p2=Player(gb2,false,true);
+    let p2=Player(gb2,false);
     
     //create ships (manually for now)
     let carrier=Ship(5);
@@ -26,7 +26,7 @@ import {startGameBtnEvent} from "./events.js";
     let destroyer5=Ship(2);
     let destroyer6=Ship(2);
     //player 1
-    p1.gb.placeShip(carrier,4,9,9,9);
+    p1.gb.placeShip(carrier,4,9,8,9);
 
     p1.gb.placeShip(battleship,0,2,0,5);
 
@@ -37,7 +37,7 @@ import {startGameBtnEvent} from "./events.js";
     p1.gb.placeShip(destroyer2,0,0,1,0);
     p1.gb.placeShip(destroyer3,0,7,1,7);
     //player 2
-    p2.gb.placeShip(carrier1,9,4,9,9);
+    p2.gb.placeShip(carrier1,9,4,9,8);
 
     p2.gb.placeShip(battleship1,2,0,5,0);
 

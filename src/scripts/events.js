@@ -39,40 +39,38 @@ function mouseoutSquare(e){
 function pvpLoop(p1,p2){
     //palyer 1 turn
     if(p1.turn){
-        playerPlay(p1,p2);
-        pvpEndTurn(p1,p2);
+        playerPlay(p1,p2,pvpEndTurn);
     }else if(p2.turn){//player 2 turn
-        playerPlay(p2,p1);
-        pvpEndTurn(p1,p2);
+        playerPlay(p2,p1,pvpEndTurn);
+    }
+    function pvpEndTurn(p1,p2){
+        const nextBtn=document.querySelector(".nextBtn");
+        nextBtn.addEventListener("click",nextTurn);
+        function nextTurn(){
+            pvpLoop(p1,p2);
+            nextBtn.removeEventListener("click",nextTurn);
+        }
     }
 }
 function pveLoop(p1,p2){
     //if real player turn or not
     if(p1.turn){
-        playerPlay(p1,p2);
-        pveEndTurn(p1,p2);
+        playerPlay(p1,p2,pveEndTurn);
     }else if(p2.turn){//computer turn
-        pveComputerPlay(p1,p2);
-        pveEndTurn(p1,p2);
+        pveComputerPlay(p1,p2,pveEndTurn);
+    }
+    function pveEndTurn(p1,p2){
+        const nextBtn=document.querySelector(".nextBtn");
+        nextBtn.addEventListener("click",nextTurn);
+        function nextTurn(){
+            pveLoop(p1,p2);
+            nextBtn.removeEventListener("click",nextTurn);
+        }
     }
 }
-function pvpEndTurn(p1,p2){
-    const nextBtn=document.querySelector(".nextBtn");
-    nextBtn.addEventListener("click",nextTurn);
-    function nextTurn(){
-        pvpLoop(p1,p2);
-        nextBtn.removeEventListener("click",nextTurn);
-    }
-}
-function pveEndTurn(p1,p2){
-    const nextBtn=document.querySelector(".nextBtn");
-    nextBtn.addEventListener("click",nextTurn);
-    function nextTurn(){
-        pveLoop(p1,p2);
-        nextBtn.removeEventListener("click",nextTurn);
-    }
-}
-function playerPlay(p1,p2){
+
+
+function playerPlay(p1,p2,endTurn){
     const gameBoardDiv=document.querySelector(".gameBoard");
     const playerBoardDiv=document.querySelector(".playerBoard");
     //remove old board 
@@ -113,17 +111,18 @@ function playerPlay(p1,p2){
             gameBoardDiv.removeEventListener('mouseout', mouseoutSquare);
             gameBoardDiv.removeEventListener("click",attackSquare);
             e.target.classList.toggle("squareStyled");
-            playerPlay(p1,p2);
+            playerPlay(p1,p2,endTurn);
         }else{
             gameBoardDiv.removeEventListener('mouseover', mouseoverSquare);
             gameBoardDiv.removeEventListener('mouseout', mouseoutSquare);
             gameBoardDiv.removeEventListener("click",attackSquare);
             e.target.classList.toggle("squareStyled");
             p1.switchTurn(p2);
+            endTurn(p1,p2);
         }
     }
 }
-function pveComputerPlay(p1,p2){
+function pveComputerPlay(p1,p2,endTurn){
     const gameBoardDiv=document.querySelector(".gameBoard");
     const playerBoardDiv=document.querySelector(".playerBoard");
     //remove old boards
@@ -151,9 +150,10 @@ function pveComputerPlay(p1,p2){
         }else{
             cpuSquare.style.backgroundColor="red";
         }
-        pveComputerPlay(p1,p2);
+        pveComputerPlay(p1,p2,endTurn);
     }else{
         p2.switchTurn(p1);
+        endTurn(p1,p2);
     }
 }
 function changeSunkShipColor(p,ship){
