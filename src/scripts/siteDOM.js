@@ -30,8 +30,8 @@ function createGameBoard(p) {
     }
 }
 function announceWinner(){
-    const gameBoard = document.querySelector(".gameBoard");
-    gameBoard.textContent="YOU WIN";
+    const boards = document.querySelector(".boards");
+    boards.textContent="YOU WIN";
 }
 function createPlayerBoard(p) {
     const boards=document.querySelector(".boards");

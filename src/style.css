@@ -64,6 +64,12 @@ body{
     justify-content: flex-start;
     align-items: center;
 }
+.displayNon{
+    display: none;
+}
+.pickMode{
+    height:520px;
+}
 .boards{
     background-color: coral;
     width: 100%;

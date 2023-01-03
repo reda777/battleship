@@ -56,6 +56,7 @@ function startGameBtnEvent(){
     const pveBtn=document.querySelector(".pveBtn");
     const restartBtn=document.querySelector(".restartBtn");
     const nextBtn=document.querySelector(".nextBtn");
+    const pickMode=document.querySelector(".pickMode");
     
     pvpBtn.addEventListener("click",startPvpGame);
     pveBtn.addEventListener("click",startPveGame);
@@ -66,6 +67,7 @@ function startGameBtnEvent(){
         pveBtn.classList.toggle("hideBtn");
         restartBtn.classList.toggle("hideBtn");
         nextBtn.classList.toggle("hideBtn");
+        pickMode.classList.remove("displayNon");
         boards.innerHTML='';
         startGameBtnEvent();
         restartBtn.removeEventListener("click",restartGame);
@@ -135,7 +137,9 @@ function pveLoop(p1,p2){
 
 function playerPlay(p1,p2,endTurn){
     const boards=document.querySelector(".boards");
+    const pickMode=document.querySelector(".pickMode");
     //remove old board 
+    pickMode.classList.add("displayNon");
     boards.innerHTML='';
     //show player and enemy board
     createPlayerBoard(p1);
@@ -166,8 +170,9 @@ function playerPlay(p1,p2,endTurn){
             if(p2.gb.board[cords[0]][cords[2]].isSunk()){
                 changeSunkShipColor(p2,p2.gb.board[cords[0]][cords[2]]);
                 if(p2.gb.checkAllShipsSunk()){
-                    gameBoardDiv.innerHTML='';
+                    boards.innerHTML='';
                     announceWinner();
+                    return;
                 }
             }else{
                 e.target.style.backgroundColor="red";
@@ -206,7 +211,7 @@ function pveComputerPlay(p1,p2,endTurn){
         if(p1.gb.board[cords.cordX][cords.cordY].isSunk()){
             changeSunkShipColor(p1,p1.gb.board[cords.cordX][cords.cordY]);
             if(p1.gb.checkAllShipsSunk()){
-                gameBoardDiv.innerHTML='';
+                boards.innerHTML='';
                 announceWinner();
             }
         }else{
