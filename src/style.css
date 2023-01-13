@@ -67,7 +67,7 @@ body{
 .displayNon{
     display: none;
 }
-.pickMode{
+.mainMessage{
     height:520px;
 }
 .boards{
@@ -77,14 +77,23 @@ body{
     justify-content: center;
     align-items: flex-start;
 }
-.playerBoard{
+.message{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.messageContent{
+    text-decoration: dashed;
+}
+
+.playerBoardSmall{
     background-color: aliceblue;
     display: grid;
     margin: 10px;
     grid-template-columns: repeat(10,20px);
     grid-template-rows: repeat(10,20px);
 }
-.gameBoard{
+.gameBoard, .playerBoard{
     background-color: aliceblue;
     display: grid;
     margin: 10px;
@@ -97,18 +106,12 @@ body{
     grid-template-columns: repeat(2,250px);
     grid-template-rows: repeat(2,50px);
 }
-.square{
+.square, .playerSquare{
     border: 1px solid black;
 }
 .squareStyled{
-    border: 1px solid black;
     cursor: pointer;
-}
-.squareStyled:hover{
     background-color: rgb(238, 225, 206);
-}
-.playerSquare{
-    border: 1px solid black;
 }
 .hitSquare{
     position: relative;
@@ -125,10 +128,10 @@ body{
     line-height: 50px;
     text-align: center;
 }
-.hitPlayerSquare{
+.hitPlayerSquareSmall{
     position: relative;
 }
-.hitPlayerSquare:after{
+.hitPlayerSquareSmall:after{
     position: absolute;
     top: 0;
     bottom: 0;
@@ -139,4 +142,8 @@ body{
     color: rgb(0, 0, 0);
     line-height: 18px;
     text-align: center;
+}
+.pickShip > div{
+    background-color: blueviolet;
+    margin: 5px;
 }

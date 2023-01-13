@@ -1,4 +1,4 @@
-import {createGameBoard,createPlayerBoard} from "../src/scripts/siteDOM";
+import {createGameBoard,createPlayerBoard,showMessage,announceWinner} from "../src/scripts/siteDOM";
 import {Gameboard} from "../src/scripts/gameboard";
 import {Player} from "../src/scripts/player";
 import {Ship} from "../src/scripts/ship";
@@ -99,6 +99,16 @@ test("createPlayerBoard adds correct classes to squares", () => {
     const square = document.querySelector('[data-id="2,3"]');
     expect(square).toHaveClass("hitPlayerSquare");
 });
+test("Show pick a ship message",()=>{
+    const str="place a ship";
+    document.body.innerHTML = `
+    <div class="message">
+
+    </div>`;
+    showMessage(str);
+    const content = document.querySelector('.messageContent');
+    expect(content.textContent).toEqual(str);
+})
 test("announce winner show which player won",()=>{
     
 });

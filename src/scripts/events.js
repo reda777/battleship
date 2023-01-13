@@ -1,14 +1,15 @@
-import { createGameBoard,createPlayerBoard,announceWinner } from "./siteDOM.js";
+import { createFinishRestartBtn,createStartGameBtn,createGameBoard,createPlayerBoard,announceWinner,showMessage,createShipsToPick,showMainMessage} from "./siteDOM.js";
 import { Gameboard } from "./gameboard.js";
 import { Ship } from "./ship.js";
 import { Player } from "./player.js";
+//start game pvp -> create players ->{show board,show ships} -> show message place ship->make ship clickable
 function createPlayers(){
     let gb1=Gameboard();
     let gb2=Gameboard();
     let p1=Player(gb1,true);
     let p2=Player(gb2,false);
     
-    //create ships (manually for now)
+    /*create ships (manually for now)
     let carrier=Ship(5);
     let battleship=Ship(4);
     let cruiser1=Ship(3);
@@ -45,22 +46,43 @@ function createPlayers(){
 
     p2.gb.placeShip(destroyer4,5,5,6,5);
     p2.gb.placeShip(destroyer5,0,0,0,1);
-    p2.gb.placeShip(destroyer6,7,0,7,1);
+    p2.gb.placeShip(destroyer6,7,0,7,1);*/
     return {p1,p2};
 }
+function createPvpPlayers(){
+    let gb1=Gameboard();
+    let gb2=Gameboard();
+    let p1=Player(gb1,true);
+    let p2=Player(gb2,false);
+    return {p1,p2};
+}
+function createPvePlayers(){
+    let gb1=Gameboard();
+    let gb2=Gameboard();
+    let p1=Player(gb1,true);
+    let p2=Player(gb2,false,true);
+    return {p1,p2};
+}
+//functions for start game pvp
 function startGameBtnEvent(){
-    let players=createPlayers();
+    //show main message
+    showMainMessage("Pick Game Mode");
+    //create start game buttons
+    createStartGameBtn();
     //initialize players and boards
+    const players=createPlayers();
+
     const boards=document.querySelector(".boards");
     const pvpBtn=document.querySelector(".pvpBtn");
     const pveBtn=document.querySelector(".pveBtn");
+    const finishBtn=document.querySelector(".finishBtn");
     const restartBtn=document.querySelector(".restartBtn");
     const nextBtn=document.querySelector(".nextBtn");
     const pickMode=document.querySelector(".pickMode");
     
     pvpBtn.addEventListener("click",startPvpGame);
     pveBtn.addEventListener("click",startPveGame);
-    restartBtn.addEventListener("click",restartGame);
+    //restartBtn.addEventListener("click",restartGame);
     
     function restartGame(){
         pvpBtn.classList.toggle("hideBtn");
@@ -73,6 +95,7 @@ function startGameBtnEvent(){
         restartBtn.removeEventListener("click",restartGame);
     }
     function startPveGame(){
+        const players=createPvePlayers();
         pvpBtn.classList.toggle("hideBtn");
         pveBtn.classList.toggle("hideBtn");
         restartBtn.classList.toggle("hideBtn");
@@ -82,22 +105,94 @@ function startGameBtnEvent(){
         pvpBtn.removeEventListener("click",startPvpGame);
         pveBtn.removeEventListener("click",startPveGame);
     }
-    function startPvpGame(){
-        pvpBtn.classList.toggle("hideBtn");
-        pveBtn.classList.toggle("hideBtn");
-        restartBtn.classList.toggle("hideBtn");
-        nextBtn.classList.toggle("hideBtn");
-        pvpLoop(players.p1,players.p2);
-        restartBtn.addEventListener("click",restartGame);
-        pvpBtn.removeEventListener("click",startPvpGame);
-        pveBtn.removeEventListener("click",startPveGame);
+}
+function pickShipEvents(p){
+    const ships = [
+        { name: "twoWide"},
+        { name: "threeWide"},
+        { name: "fourWide"},
+        { name: "fiveWide"}
+    ];
+    for (let i = 0; i < ships.length; i++) {
+        const ship=document.querySelector(`.${ships[i].name}`);
+        ship.addEventListener("click",changeSize);
+    }
+    function changeSize(e){
+        const gameBoardDiv=document.querySelector(".playerBoard");
+        gameBoardDiv.dataset.size=e.target.dataset.size;
+        gameBoardDiv.dataset.dir=e.target.getAttribute('class');
+        //add mouseover and mouseout events
+        gameBoardDiv.addEventListener('mouseover', mouseoverShip);
+        gameBoardDiv.addEventListener('mouseout', mouseoverShip);
+        placeShipEvent(p);
     }
 }
-function mouseoverSquare(e){
-    if(e.target.classList.contains("hitSquare")) return;
-    e.target.classList.toggle("squareStyled");
+
+function mouseoverShip(e){
+    const gameBoardDiv=document.querySelector(".playerBoard");
+    const size=gameBoardDiv.dataset.size;
+    const dir=gameBoardDiv.dataset.dir;
+    if(dir=="horizontal"){
+        if((Number(e.target.dataset.id[0]) + Number(size))<=10){
+            for(let i=0; i<size;i++){
+                const nextTarget=document.
+                querySelector(`.playerBoard [data-id="${Number(e.target.dataset.id[0]) + i},${e.target.dataset.id[2]}"]`);
+                nextTarget.classList.toggle("squareStyled");
+            }
+        }
+    }else if(dir=="vertical"){
+        if((Number(e.target.dataset.id[2]) + Number(size))<=10){
+            for(let i=0; i<size;i++){
+                const nextTarget=document.
+                querySelector(`.playerBoard [data-id="${e.target.dataset.id[0]},${Number(e.target.dataset.id[2]) + i}"]`);
+                nextTarget.classList.toggle("squareStyled");
+            }
+        }   
+    }  
 }
-function mouseoutSquare(e){
+function placeShipEvent(p){
+    const gameBoardDiv=document.querySelector(".playerBoard");
+    gameBoardDiv.addEventListener('click', placeShipClickEvent);
+    function placeShipClickEvent(e){
+        let x=Number(e.target.dataset.id[0]);
+        let y=Number(e.target.dataset.id[2]);
+        let size=Number(gameBoardDiv.dataset.size);
+        let dir=gameBoardDiv.dataset.dir;
+        let ship=Ship(size);
+        if(dir=="vertical"){
+            p.gb.placeShip(ship,x,y,x,y+size-1);
+        }else if(dir=="horizontal"){
+            p.gb.placeShip(ship,x,y,x+size-1,y);
+        }
+        
+        //remove current page and show new gameboard
+        removeCurrentPage();
+        createPlayerBoard(p);
+    }
+    
+}
+
+function startPvpGame(){
+    //create players
+    const players=createPvpPlayers();
+    //remove current page
+    removeCurrentPage();
+    //add "place a ship" message
+    showMessage("Place Ships");
+    //create pick ships
+    createShipsToPick();
+    //create and show player1 board
+    createPlayerBoard(players.p1);
+    //show finish&restart placing ships button
+    createFinishRestartBtn();
+    //create pick ship event
+    pickShipEvents(players.p1);
+}
+function removeCurrentPage(){
+    const boards=document.querySelector(".boards");
+    boards.innerHTML='';
+}
+function mouseoverSquare(e){
     if(e.target.classList.contains("hitSquare")) return;
     e.target.classList.toggle("squareStyled");
 }
@@ -148,7 +243,7 @@ function playerPlay(p1,p2,endTurn){
     const gameBoardDiv=document.querySelector(".gameBoard");
     //add mouseover and mouseout events
     gameBoardDiv.addEventListener('mouseover', mouseoverSquare);
-    gameBoardDiv.addEventListener('mouseout', mouseoutSquare);
+    gameBoardDiv.addEventListener('mouseout', mouseoverSquare);
     //add click event to the game board
     gameBoardDiv.addEventListener("click",attackSquare,{once:true});
     //click event function
@@ -178,12 +273,12 @@ function playerPlay(p1,p2,endTurn){
                 e.target.style.backgroundColor="red";
             }
             gameBoardDiv.removeEventListener('mouseover', mouseoverSquare);
-            gameBoardDiv.removeEventListener('mouseout', mouseoutSquare);
+            gameBoardDiv.removeEventListener('mouseout', mouseoverSquare);
             e.target.classList.toggle("squareStyled");
             playerPlay(p1,p2,endTurn);
         }else{
             gameBoardDiv.removeEventListener('mouseover', mouseoverSquare);
-            gameBoardDiv.removeEventListener('mouseout', mouseoutSquare);
+            gameBoardDiv.removeEventListener('mouseout', mouseoverSquare);
             e.target.classList.toggle("squareStyled");
             p1.switchTurn(p2);
             endTurn(p1,p2);
