@@ -106,72 +106,6 @@ function startGameBtnEvent(){
         pveBtn.removeEventListener("click",startPveGame);
     }
 }
-function pickShipEvents(p){
-    const ships = [
-        { name: "twoWide"},
-        { name: "threeWide"},
-        { name: "fourWide"},
-        { name: "fiveWide"}
-    ];
-    for (let i = 0; i < ships.length; i++) {
-        const ship=document.querySelector(`.${ships[i].name}`);
-        ship.addEventListener("click",changeSize);
-    }
-    function changeSize(e){
-        const gameBoardDiv=document.querySelector(".playerBoard");
-        gameBoardDiv.dataset.size=e.target.dataset.size;
-        gameBoardDiv.dataset.dir=e.target.getAttribute('class');
-        //add mouseover and mouseout events
-        gameBoardDiv.addEventListener('mouseover', mouseoverShip);
-        gameBoardDiv.addEventListener('mouseout', mouseoverShip);
-        placeShipEvent(p);
-    }
-}
-
-function mouseoverShip(e){
-    const gameBoardDiv=document.querySelector(".playerBoard");
-    const size=gameBoardDiv.dataset.size;
-    const dir=gameBoardDiv.dataset.dir;
-    if(dir=="horizontal"){
-        if((Number(e.target.dataset.id[0]) + Number(size))<=10){
-            for(let i=0; i<size;i++){
-                const nextTarget=document.
-                querySelector(`.playerBoard [data-id="${Number(e.target.dataset.id[0]) + i},${e.target.dataset.id[2]}"]`);
-                nextTarget.classList.toggle("squareStyled");
-            }
-        }
-    }else if(dir=="vertical"){
-        if((Number(e.target.dataset.id[2]) + Number(size))<=10){
-            for(let i=0; i<size;i++){
-                const nextTarget=document.
-                querySelector(`.playerBoard [data-id="${e.target.dataset.id[0]},${Number(e.target.dataset.id[2]) + i}"]`);
-                nextTarget.classList.toggle("squareStyled");
-            }
-        }   
-    }  
-}
-function placeShipEvent(p){
-    const gameBoardDiv=document.querySelector(".playerBoard");
-    gameBoardDiv.addEventListener('click', placeShipClickEvent);
-    function placeShipClickEvent(e){
-        let x=Number(e.target.dataset.id[0]);
-        let y=Number(e.target.dataset.id[2]);
-        let size=Number(gameBoardDiv.dataset.size);
-        let dir=gameBoardDiv.dataset.dir;
-        let ship=Ship(size);
-        if(dir=="vertical"){
-            p.gb.placeShip(ship,x,y,x,y+size-1);
-        }else if(dir=="horizontal"){
-            p.gb.placeShip(ship,x,y,x+size-1,y);
-        }
-        
-        //remove current page and show new gameboard
-        removeCurrentPage();
-        createPlayerBoard(p);
-    }
-    
-}
-
 function startPvpGame(){
     //create players
     const players=createPvpPlayers();
@@ -187,6 +121,74 @@ function startPvpGame(){
     createFinishRestartBtn();
     //create pick ship event
     pickShipEvents(players.p1);
+}
+function pickShipEvents(p){
+    
+    const ships = [
+        { name: "twoWide"},
+        { name: "threeWide"},
+        { name: "fourWide"},
+        { name: "fiveWide"}
+    ];
+    for (let i = 0; i < ships.length; i++) {
+        const ship=document.querySelector(`.${ships[i].name}`);
+        ship.addEventListener("click",changeSize);
+    }
+    function changeSize(e){
+        const gameBoardDiv=document.querySelector(".playerBoard");
+        p.shipName=e.target.parentNode.getAttribute('class');
+        p.size=Number(e.target.dataset.size);
+        p.dir=e.target.getAttribute('class');
+
+        gameBoardDiv.addEventListener('mouseover', mouseoverShip);
+        gameBoardDiv.addEventListener('mouseout', mouseoverShip);
+
+        gameBoardDiv.addEventListener('click', placeShipClickEvent);
+    }
+    function placeShipClickEvent(e){
+        const count={twoWide:3,threeWide:2,fourWide:2,fiveWide:1};
+        const gameBoardDiv=document.querySelector(".playerBoard");
+        let x=Number(e.target.dataset.id[0]);
+        let y=Number(e.target.dataset.id[2]);
+        let size=p.size;
+        let dir=p.dir;
+        if(p.shipsCount[p.shipName]<count[p.shipName]){
+            let ship=Ship(size);
+            if(dir=="vertical"){
+                if(p.gb.placeShip(ship,x,y,x,y+size-1))
+                    p.shipsCount[p.shipName]+=1;
+            }else if(dir=="horizontal"){
+                if(p.gb.placeShip(ship,x,y,x+size-1,y))
+                    p.shipsCount[p.shipName]+=1;
+            }
+            //remove current page and show new gameboard
+            removeCurrentPage();
+            createPlayerBoard(p);
+        }else{
+            console.log("you cant add more ships of "+p.shipName);
+        }   
+    }
+    function mouseoverShip(e){
+        const size=p.size;
+        const dir=p.dir;
+        if(dir=="horizontal"){
+            if((Number(e.target.dataset.id[0]) + size)<=10){
+                for(let i=0; i<size;i++){
+                    const nextTarget=document.
+                    querySelector(`.playerBoard [data-id="${Number(e.target.dataset.id[0]) + i},${e.target.dataset.id[2]}"]`);
+                    nextTarget.classList.toggle("squareStyled");
+                }
+            }
+        }else if(dir=="vertical"){
+            if((Number(e.target.dataset.id[2]) + size)<=10){
+                for(let i=0; i<size;i++){
+                    const nextTarget=document.
+                    querySelector(`.playerBoard [data-id="${e.target.dataset.id[0]},${Number(e.target.dataset.id[2]) + i}"]`);
+                    nextTarget.classList.toggle("squareStyled");
+                }
+            }   
+        }  
+    }
 }
 function removeCurrentPage(){
     const boards=document.querySelector(".boards");
@@ -228,8 +230,6 @@ function pveLoop(p1,p2){
         }
     }
 }
-
-
 function playerPlay(p1,p2,endTurn){
     const boards=document.querySelector(".boards");
     const pickMode=document.querySelector(".pickMode");

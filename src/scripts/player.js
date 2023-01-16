@@ -15,6 +15,10 @@ function createRandomCords(that){
 function Player(gb,t,isAI=false){
     return {
         turn: t,
+        shipName: undefined,
+        size: undefined,
+        dir: undefined,
+        shipsCount: {twoWide:0,threeWide:0,fourWide:0,fiveWide:0},
         gb: gb,
         switchTurn(p){
             this.turn=(this.turn)?false:true;
