@@ -130,11 +130,13 @@ function pickShipEvents(p){
         { name: "fourWide"},
         { name: "fiveWide"}
     ];
+    let event;
     for (let i = 0; i < ships.length; i++) {
         const ship=document.querySelector(`.${ships[i].name}`);
         ship.addEventListener("click",changeSize);
     }
     function changeSize(e){
+        event=e;
         const gameBoardDiv=document.querySelector(".playerBoard");
         p.shipName=e.target.parentNode.getAttribute('class');
         p.size=Number(e.target.dataset.size);
@@ -147,7 +149,6 @@ function pickShipEvents(p){
     }
     function placeShipClickEvent(e){
         const count={twoWide:3,threeWide:2,fourWide:2,fiveWide:1};
-        const gameBoardDiv=document.querySelector(".playerBoard");
         let x=Number(e.target.dataset.id[0]);
         let y=Number(e.target.dataset.id[2]);
         let size=p.size;
@@ -164,6 +165,7 @@ function pickShipEvents(p){
             //remove current page and show new gameboard
             removeCurrentPage();
             createPlayerBoard(p);
+            changeSize(event);
         }else{
             console.log("you cant add more ships of "+p.shipName);
         }   
