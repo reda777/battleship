@@ -1,5 +1,6 @@
 function showMessage(str){
     const message=document.querySelector(".message");
+    message.innerHTML='';
     const content=document.createElement("div");
     content.className="messageContent";
     content.textContent=str;

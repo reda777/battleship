@@ -155,19 +155,23 @@ function pickShipEvents(p){
         let dir=p.dir;
         if(p.shipsCount[p.shipName]<count[p.shipName]){
             let ship=Ship(size);
-            if(dir=="vertical"){
+            if(dir=="vertical" && (Number(e.target.dataset.id[2]) + size)<=10){
                 if(p.gb.placeShip(ship,x,y,x,y+size-1))
                     p.shipsCount[p.shipName]+=1;
-            }else if(dir=="horizontal"){
+            }else if(dir=="horizontal" && (Number(e.target.dataset.id[0]) + size)<=10){
                 if(p.gb.placeShip(ship,x,y,x+size-1,y))
                     p.shipsCount[p.shipName]+=1;
+            }
+            if(JSON.stringify(p.shipsCount)==JSON.stringify(count)){
+                showMessage("Press Finish");
             }
             //remove current page and show new gameboard
             removeCurrentPage();
             createPlayerBoard(p);
+            //keep the selected ship dim
             changeSize(event);
         }else{
-            console.log("you cant add more ships of "+p.shipName);
+            console.log(p.shipsCount);
         }   
     }
     function mouseoverShip(e){
