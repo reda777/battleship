@@ -106,13 +106,14 @@ function startGameBtnEvent(){
         pveBtn.removeEventListener("click",startPveGame);
     }
 }
+
 function startPvpGame(){
     //create players
     const players=createPvpPlayers();
     //remove current page
     removeCurrentPage();
     //add "place a ship" message
-    showMessage("Place Ships");
+    showMessage("Place Ships Player 1");
     //create pick ships
     createShipsToPick();
     //create and show player1 board
@@ -120,10 +121,11 @@ function startPvpGame(){
     //show finish&restart placing ships button
     createFinishRestartBtn();
     //create pick ship event
-    pickShipEvents(players.p1);
+    pickShipEvents(players);
 }
 function pickShipEvents(p){
-    
+    let currentPlayer=p.p1;
+    let finishBtnFunction=nextPlayerPickShips;
     const ships = [
         { name: "twoWide"},
         { name: "threeWide"},
@@ -138,9 +140,9 @@ function pickShipEvents(p){
     function changeSize(e){
         event=e;
         const gameBoardDiv=document.querySelector(".playerBoard");
-        p.shipName=e.target.parentNode.getAttribute('class');
-        p.size=Number(e.target.dataset.size);
-        p.dir=e.target.getAttribute('class');
+        currentPlayer.shipName=e.target.parentNode.getAttribute('class');
+        currentPlayer.size=Number(e.target.dataset.size);
+        currentPlayer.dir=e.target.getAttribute('class');
 
         gameBoardDiv.addEventListener('mouseover', mouseoverShip);
         gameBoardDiv.addEventListener('mouseout', mouseoverShip);
@@ -151,32 +153,46 @@ function pickShipEvents(p){
         const count={twoWide:3,threeWide:2,fourWide:2,fiveWide:1};
         let x=Number(e.target.dataset.id[0]);
         let y=Number(e.target.dataset.id[2]);
-        let size=p.size;
-        let dir=p.dir;
-        if(p.shipsCount[p.shipName]<count[p.shipName]){
+        let size=currentPlayer.size;
+        let dir=currentPlayer.dir;
+        if(currentPlayer.shipsCount[currentPlayer.shipName]<count[currentPlayer.shipName]){
             let ship=Ship(size);
             if(dir=="vertical" && (Number(e.target.dataset.id[2]) + size)<=10){
-                if(p.gb.placeShip(ship,x,y,x,y+size-1))
-                    p.shipsCount[p.shipName]+=1;
+                if(currentPlayer.gb.placeShip(ship,x,y,x,y+size-1))
+                    currentPlayer.shipsCount[currentPlayer.shipName]+=1;
             }else if(dir=="horizontal" && (Number(e.target.dataset.id[0]) + size)<=10){
-                if(p.gb.placeShip(ship,x,y,x+size-1,y))
-                    p.shipsCount[p.shipName]+=1;
+                if(currentPlayer.gb.placeShip(ship,x,y,x+size-1,y))
+                    currentPlayer.shipsCount[currentPlayer.shipName]+=1;
             }
-            if(JSON.stringify(p.shipsCount)==JSON.stringify(count)){
+            if(JSON.stringify(currentPlayer.shipsCount)==JSON.stringify(count)){
+                const finishBtn=document.querySelector(".finishBtn");
                 showMessage("Press Finish");
+                finishBtn.addEventListener('click',finishBtnFunction);
             }
             //remove current page and show new gameboard
             removeCurrentPage();
-            createPlayerBoard(p);
+            createPlayerBoard(currentPlayer);
             //keep the selected ship dim
             changeSize(event);
         }else{
-            console.log(p.shipsCount);
+            console.log(currentPlayer.shipsCount);
         }   
     }
+    function nextPlayerPickShips(){
+        currentPlayer=p.p2;
+        finishBtnFunction=finishBtnStartPvpLoop;
+        //remove current page
+        removeCurrentPage();
+        //add "place a ship" message
+        showMessage("Place Ships Player 2");
+        //create and show player2 board
+        createPlayerBoard(currentPlayer);
+        //show finish&restart placing ships button
+        createFinishRestartBtn();
+    }
     function mouseoverShip(e){
-        const size=p.size;
-        const dir=p.dir;
+        const size=currentPlayer.size;
+        const dir=currentPlayer.dir;
         if(dir=="horizontal"){
             if((Number(e.target.dataset.id[0]) + size)<=10){
                 for(let i=0; i<size;i++){
@@ -195,6 +211,9 @@ function pickShipEvents(p){
             }   
         }  
     }
+}
+function finishBtnStartPvpLoop(){
+    console.log("start pvp loop");
 }
 function removeCurrentPage(){
     const boards=document.querySelector(".boards");
