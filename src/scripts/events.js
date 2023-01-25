@@ -1,4 +1,4 @@
-import { createFinishRestartBtn,createStartGameBtn,createGameBoard,createPlayerBoard,announceWinner,showMessage,createShipsToPick,showMainMessage} from "./siteDOM.js";
+import { createEndturnRestartBtn,createFinishRestartBtn,createStartGameBtn,createGameBoard,createPlayerBoard,announceWinner,showMessage,createShipsToPick,showMainMessage} from "./siteDOM.js";
 import { Gameboard } from "./gameboard.js";
 import { Ship } from "./ship.js";
 import { Player } from "./player.js";
@@ -114,7 +114,8 @@ function pickShipEvents(p){
         gameBoardDiv.addEventListener('click', placeShipClickEvent);
     }
     function placeShipClickEvent(e){
-        const count={twoWide:3,threeWide:2,fourWide:2,fiveWide:1};
+        //number of ships allowed
+        const count={twoWide:1,threeWide:1,fourWide:0,fiveWide:1};
         let x=Number(e.target.dataset.id[0]);
         let y=Number(e.target.dataset.id[2]);
         let size=currentPlayer.size;
@@ -144,7 +145,7 @@ function pickShipEvents(p){
     }
     function nextPlayerPickShips(){
         currentPlayer=p.p2;
-        finishBtnFunction=finishBtnStartPvpLoop.bind(p);
+        finishBtnFunction=()=>{finishBtnStartPvpLoop(p);};
         //remove current page
         removeCurrentPage();
         //add "place a ship" message
@@ -176,14 +177,9 @@ function pickShipEvents(p){
         }  
     }
 }
-function finishBtnStartPvpLoop(){
-    console.log("start pvp loop");
-    //remove current page 
-    removeCurrentPage();
-    //create enemy board and player board
-    createPlayerBoard(this.p1);
-    createGameBoard(this.p2);
-    
+function finishBtnStartPvpLoop(p){
+    createEndturnRestartBtn();
+    pvpLoop(p.p1,p.p2);
 }
 function removeCurrentPage(){
     const boards=document.querySelector(".boards");
@@ -196,17 +192,9 @@ function mouseoverSquare(e){
 function pvpLoop(p1,p2){
     //palyer 1 turn
     if(p1.turn){
-        playerPlay(p1,p2,pvpEndTurn);
+        playerPlay(p1,p2);
     }else if(p2.turn){//player 2 turn
-        playerPlay(p2,p1,pvpEndTurn);
-    }
-    function pvpEndTurn(p1,p2){
-        const nextBtn=document.querySelector(".nextBtn");
-        nextBtn.addEventListener("click",nextTurn);
-        function nextTurn(){
-            pvpLoop(p1,p2);
-            nextBtn.removeEventListener("click",nextTurn);
-        }
+        playerPlay(p2,p1);
     }
 }
 function pveLoop(p1,p2){
@@ -225,14 +213,11 @@ function pveLoop(p1,p2){
         }
     }
 }
-function playerPlay(p1,p2,endTurn){
-    const boards=document.querySelector(".boards");
-    const pickMode=document.querySelector(".pickMode");
-    //remove old board 
-    pickMode.classList.add("displayNon");
-    boards.innerHTML='';
-    //show player and enemy board
-    createPlayerBoard(p1);
+function playerPlay(p1,p2){
+    //remove current page 
+    removeCurrentPage();
+    //create enemy board and player board
+    createPlayerBoard(p1,`playerBoardSmall`);
     createGameBoard(p2);
     //select gameboard div
     const gameBoardDiv=document.querySelector(".gameBoard");
@@ -260,7 +245,7 @@ function playerPlay(p1,p2,endTurn){
             if(p2.gb.board[cords[0]][cords[2]].isSunk()){
                 changeSunkShipColor(p2,p2.gb.board[cords[0]][cords[2]]);
                 if(p2.gb.checkAllShipsSunk()){
-                    boards.innerHTML='';
+                    removeCurrentPage();
                     announceWinner();
                     return;
                 }
@@ -269,14 +254,21 @@ function playerPlay(p1,p2,endTurn){
             }
             gameBoardDiv.removeEventListener('mouseover', mouseoverSquare);
             gameBoardDiv.removeEventListener('mouseout', mouseoverSquare);
+            //remove hover class
             e.target.classList.toggle("squareStyled");
-            playerPlay(p1,p2,endTurn);
+            //play again
+            playerPlay(p1,p2);
         }else{
             gameBoardDiv.removeEventListener('mouseover', mouseoverSquare);
             gameBoardDiv.removeEventListener('mouseout', mouseoverSquare);
             e.target.classList.toggle("squareStyled");
             p1.switchTurn(p2);
-            endTurn(p1,p2);
+            const nextBtn=document.querySelector(".nextBtn");
+            nextBtn.addEventListener("click",nextTurn);
+            function nextTurn(){
+                pvpLoop(p1,p2);
+                nextBtn.removeEventListener("click",nextTurn);
+            }
         }
     }
 }

@@ -13,6 +13,21 @@ function showMainMessage(str){
     content.textContent=str;
     message.appendChild(content);
 }
+function createEndturnRestartBtn(){
+    const gameMode = document.querySelector('.gameMode');
+    //clear element
+    gameMode.innerHTML='';
+
+    const restartBtn = document.createElement('div');
+    restartBtn.classList.add('restartBtn');
+    restartBtn.textContent = 'Restart Game';
+    gameMode.appendChild(restartBtn);
+
+    const nextBtn = document.createElement('div');
+    nextBtn.classList.add('nextBtn');
+    nextBtn.textContent = 'End Turn';
+    gameMode.appendChild(nextBtn);
+}
 function createFinishRestartBtn(){
     const gameMode = document.querySelector('.gameMode');
     //clear element
@@ -114,10 +129,10 @@ function announceWinner(){
     const boards = document.querySelector(".boards");
     boards.textContent="YOU WIN";
 }
-function createPlayerBoard(p) {
+function createPlayerBoard(p,className=`playerBoard`) {
     const boards=document.querySelector(".boards");
     const playerBoard = document.createElement("div");
-    playerBoard.classList.add("playerBoard");
+    playerBoard.classList.add(className);
     boards.appendChild(playerBoard);
     let playerSquare;
     let dim=p.gb.dim;
@@ -145,4 +160,4 @@ function createPlayerBoard(p) {
         }
     }
 }
-export {createFinishRestartBtn,createStartGameBtn,createGameBoard,createPlayerBoard,announceWinner,showMessage,createShipsToPick,showMainMessage};
+export {createEndturnRestartBtn,createFinishRestartBtn,createStartGameBtn,createGameBoard,createPlayerBoard,announceWinner,showMessage,createShipsToPick,showMainMessage};
