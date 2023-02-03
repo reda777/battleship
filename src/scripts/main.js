@@ -1,5 +1,5 @@
-import {startGameBtnEvent} from "./events.js";
+import {main} from "./events.js";
 
 (function gameLoop(){
-    startGameBtnEvent();
+    main();
 })();

@@ -2,14 +2,6 @@ import { createEndturnRestartBtn,createFinishRestartBtn,createStartGameBtn,creat
 import { Gameboard } from "./gameboard.js";
 import { Ship } from "./ship.js";
 import { Player } from "./player.js";
-//start game pvp -> create players ->{show board,show ships} -> show message place ship->make ship clickable
-function createPlayers(){
-    let gb1=Gameboard();
-    let gb2=Gameboard();
-    let p1=Player(gb1,true);
-    let p2=Player(gb2,false);
-    return {p1,p2};
-}
 function createPvpPlayers(){
     let gb1=Gameboard();
     let gb2=Gameboard();
@@ -25,47 +17,18 @@ function createPvePlayers(){
     return {p1,p2};
 }
 //functions for start game pvp
-function startGameBtnEvent(){
+function main(){
     //show main message
     showMainMessage("Pick Game Mode");
     //create start game buttons
     createStartGameBtn();
-    //initialize players and boards
-    const players=createPlayers();
-
-    const boards=document.querySelector(".boards");
+    //select created buttons
     const pvpBtn=document.querySelector(".pvpBtn");
     const pveBtn=document.querySelector(".pveBtn");
-    const finishBtn=document.querySelector(".finishBtn");
-    const restartBtn=document.querySelector(".restartBtn");
-    const nextBtn=document.querySelector(".nextBtn");
-    const pickMode=document.querySelector(".pickMode");
     
     pvpBtn.addEventListener("click",startPvpGame);
     pveBtn.addEventListener("click",startPveGame);
-    //restartBtn.addEventListener("click",restartGame);
     
-    function restartGame(){
-        pvpBtn.classList.toggle("hideBtn");
-        pveBtn.classList.toggle("hideBtn");
-        restartBtn.classList.toggle("hideBtn");
-        nextBtn.classList.toggle("hideBtn");
-        pickMode.classList.remove("displayNon");
-        boards.innerHTML='';
-        startGameBtnEvent();
-        restartBtn.removeEventListener("click",restartGame);
-    }
-    function startPveGame(){
-        const players=createPvePlayers();
-        pvpBtn.classList.toggle("hideBtn");
-        pveBtn.classList.toggle("hideBtn");
-        restartBtn.classList.toggle("hideBtn");
-        nextBtn.classList.toggle("hideBtn");
-        pveLoop(players.p1,players.p2);
-        restartBtn.addEventListener("click",restartGame);
-        pvpBtn.removeEventListener("click",startPvpGame);
-        pveBtn.removeEventListener("click",startPveGame);
-    }
 }
 function startPvpGame(){
     //create players
@@ -73,9 +36,9 @@ function startPvpGame(){
     //show finish&restart placing ships button
     createFinishRestartBtn();
     //start placing ships phase
-    placeShipLoop(players,"Player 1");
+    placeShipLoopPvp(players,"Player 1");
 }
-function placeShipLoop(players,playerName){
+function placeShipLoopPvp(players,playerName){
     //remove current page
     removeCurrentPage();
     //add "place a ship" message
@@ -87,6 +50,7 @@ function placeShipLoop(players,playerName){
     //create pick ship event
     pickShipEvents(players);
 }
+
 function pickShipEvents(p){
     let currentPlayer=p.p1;
     let finishBtnFunction=nextPlayerPickShips;
@@ -108,14 +72,14 @@ function pickShipEvents(p){
         currentPlayer.size=Number(e.target.dataset.size);
         currentPlayer.dir=e.target.getAttribute('class');
 
-        gameBoardDiv.addEventListener('mouseover', mouseoverShip);
-        gameBoardDiv.addEventListener('mouseout', mouseoverShip);
+        gameBoardDiv.addEventListener('mouseover', mouseoverShip.bind(currentPlayer));
+        gameBoardDiv.addEventListener('mouseout', mouseoverShip.bind(currentPlayer));
 
         gameBoardDiv.addEventListener('click', placeShipClickEvent);
     }
     function placeShipClickEvent(e){
         //number of ships allowed
-        const count={twoWide:1,threeWide:1,fourWide:0,fiveWide:1};
+        const count=currentPlayer.gb.shipsCount;;
         let x=Number(e.target.dataset.id[0]);
         let y=Number(e.target.dataset.id[2]);
         let size=currentPlayer.size;
@@ -155,9 +119,11 @@ function pickShipEvents(p){
         //show finish&restart placing ships button
         createFinishRestartBtn();
     }
-    function mouseoverShip(e){
-        const size=currentPlayer.size;
-        const dir=currentPlayer.dir;
+    
+}
+function mouseoverShip(e){
+        const size=this.size;
+        const dir=this.dir;
         if(dir=="horizontal"){
             if((Number(e.target.dataset.id[0]) + size)<=10){
                 for(let i=0; i<size;i++){
@@ -176,7 +142,6 @@ function pickShipEvents(p){
             }   
         }  
     }
-}
 function finishBtnStartPvpLoop(p){
     createEndturnRestartBtn();
     pvpLoop(p.p1,p.p2);
@@ -195,22 +160,6 @@ function pvpLoop(p1,p2){
         playerPlay(p1,p2);
     }else if(p2.turn){//player 2 turn
         playerPlay(p2,p1);
-    }
-}
-function pveLoop(p1,p2){
-    //if real player turn or not
-    if(p1.turn){
-        playerPlay(p1,p2,pveEndTurn);
-    }else if(p2.turn){//computer turn
-        pveComputerPlay(p1,p2,pveEndTurn);
-    }
-    function pveEndTurn(p1,p2){
-        const nextBtn=document.querySelector(".nextBtn");
-        nextBtn.addEventListener("click",nextTurn);
-        function nextTurn(){
-            pveLoop(p1,p2);
-            nextBtn.removeEventListener("click",nextTurn);
-        }
     }
 }
 function playerPlay(p1,p2){
@@ -272,14 +221,175 @@ function playerPlay(p1,p2){
         }
     }
 }
-function pveComputerPlay(p1,p2,endTurn){
-    const boards=document.querySelector(".boards");
-    //remove old board 
-    boards.innerHTML='';
-    //show real player and enemy board to attack
-    createPlayerBoard(p1);
-    createGameBoard(p1);
+function startPveGame(){
+    //create players
+    const players=createPvePlayers();
+    //show finish&restart placing ships button
+    createFinishRestartBtn();
+    //start placing ships phase
+    placeShipLoopPve(players,"Player 1");
+}
+function placeShipLoopPve(players,playerName){
+    //remove current page
+    removeCurrentPage();
+    //add "place a ship" message
+    showMessage("Place Ships "+playerName);
+    //create ships interface
+    createShipsToPick();
+    //create and show player1 board
+    createPlayerBoard(players.p1);
+    //create pick ship event
+    pickShipEventsPve(players);
+}
+function pickShipEventsPve(p){
+    let currentPlayer=p.p1;
+    let finishBtnFunction=()=>{finishBtnStartPveLoop(p);};
+    const ships = [
+        { name: "twoWide"},
+        { name: "threeWide"},
+        { name: "fourWide"},
+        { name: "fiveWide"}
+    ];
+    let event;
+    for (let i = 0; i < ships.length; i++) {
+        const ship=document.querySelector(`.${ships[i].name}`);
+        ship.addEventListener("click",changeSize);
+    }
+    function changeSize(e){
+        event=e;
+        const gameBoardDiv=document.querySelector(".playerBoard");
+        currentPlayer.shipName=e.target.parentNode.getAttribute('class');
+        currentPlayer.size=Number(e.target.dataset.size);
+        currentPlayer.dir=e.target.getAttribute('class');
+
+        gameBoardDiv.addEventListener('mouseover', mouseoverShip.bind(currentPlayer));
+        gameBoardDiv.addEventListener('mouseout', mouseoverShip.bind(currentPlayer));
+
+        gameBoardDiv.addEventListener('click', placeShipClickEvent);
+    }
+    function placeShipClickEvent(e){
+        //number of ships allowed
+        const count=currentPlayer.gb.shipsCount;
+        let x=Number(e.target.dataset.id[0]);
+        let y=Number(e.target.dataset.id[2]);
+        let size=currentPlayer.size;
+        let dir=currentPlayer.dir;
+        if(currentPlayer.shipsCount[currentPlayer.shipName]<count[currentPlayer.shipName]){
+            let ship=Ship(size);
+            if(dir=="vertical" && (Number(e.target.dataset.id[2]) + size)<=10){
+                if(currentPlayer.gb.placeShip(ship,x,y,x,y+size-1))
+                    currentPlayer.shipsCount[currentPlayer.shipName]+=1;
+            }else if(dir=="horizontal" && (Number(e.target.dataset.id[0]) + size)<=10){
+                if(currentPlayer.gb.placeShip(ship,x,y,x+size-1,y))
+                    currentPlayer.shipsCount[currentPlayer.shipName]+=1;
+            }
+            if(JSON.stringify(currentPlayer.shipsCount)==JSON.stringify(count)){
+                const finishBtn=document.querySelector(".finishBtn");
+                showMessage("Press Finish");
+                finishBtn.addEventListener('click',finishBtnFunction);
+            }
+            //remove current page and show new gameboard
+            removeCurrentPage();
+            createPlayerBoard(currentPlayer);
+            //keep the selected ship dim
+            changeSize(event);
+        }else{
+            console.log(currentPlayer.shipsCount);
+        }   
+    }
+    
+}
+function placeShipsForComputer(p){
+    const translateShipNames={twoWide:2,threeWide:3,fourWide:4,fiveWide:5};
+    let count=p.gb.shipsCount;
+    let ship;
+    for(let shipName in count){
+        for(let i=0;i<count[shipName];i++){
+            ship=Ship(translateShipNames[shipName]);
+            p.randomPlace(ship);
+        }
+    }
+}
+function finishBtnStartPveLoop(p){
+    //place ship randomly for computer player
+    placeShipsForComputer(p.p2);
+    createEndturnRestartBtn();
+    pveLoop(p.p1,p.p2);
+}
+function pveLoop(p1,p2){
+    //if real player turn or not
+    if(p1.turn){
+        playerPlayPve(p1,p2);
+    }else if(p2.turn){//computer turn
+        pveComputerPlay(p1,p2);
+    }
+}
+function playerPlayPve(p1,p2){
+    //remove current page 
+    removeCurrentPage();
+    //create enemy board and player board
+    createPlayerBoard(p1,`playerBoardSmall`);
+    createGameBoard(p2);
+    //select gameboard div
     const gameBoardDiv=document.querySelector(".gameBoard");
+    //add mouseover and mouseout events
+    gameBoardDiv.addEventListener('mouseover', mouseoverSquare);
+    gameBoardDiv.addEventListener('mouseout', mouseoverSquare);
+    //add click event to the game board
+    gameBoardDiv.addEventListener("click",attackSquare,{once:true});
+    //click event function
+    function attackSquare(e){
+        //get clicked cords from the element's data-id
+        const cords=e.target.dataset.id;
+        //check if cords already clicked
+        if(p2.gb.hitCords.some(arr => arr[0] == cords[0] && arr[1] == cords[2])){
+            gameBoardDiv.addEventListener("click",attackSquare,{once:true});
+            return;
+        }
+        //send attack to the enemy
+        p2.gb.receiveAttack(cords[0],cords[2]);
+        //add X to the attacked square
+        e.target.classList.add("hitSquare");
+        //if square is a ship
+        if(p2.gb.board[cords[0]][cords[2]]!=undefined){
+            //if all ship squares are attacked
+            if(p2.gb.board[cords[0]][cords[2]].isSunk()){
+                changeSunkShipColor(p2,p2.gb.board[cords[0]][cords[2]]);
+                if(p2.gb.checkAllShipsSunk()){
+                    removeCurrentPage();
+                    announceWinner();
+                    return;
+                }
+            }else{
+                e.target.style.backgroundColor="red";
+            }
+            gameBoardDiv.removeEventListener('mouseover', mouseoverSquare);
+            gameBoardDiv.removeEventListener('mouseout', mouseoverSquare);
+            //remove hover class
+            e.target.classList.toggle("squareStyled");
+            //play again
+            playerPlayPve(p1,p2);
+        }else{
+            gameBoardDiv.removeEventListener('mouseover', mouseoverSquare);
+            gameBoardDiv.removeEventListener('mouseout', mouseoverSquare);
+            e.target.classList.toggle("squareStyled");
+            p1.switchTurn(p2);
+            const nextBtn=document.querySelector(".nextBtn");
+            nextBtn.addEventListener("click",nextTurn);
+            function nextTurn(){
+                pveLoop(p1,p2);
+                nextBtn.removeEventListener("click",nextTurn);
+            }
+        }
+    }
+}
+
+function pveComputerPlay(p1,p2){
+    //remove current page 
+    removeCurrentPage();
+    //create enemy board and player board
+    createPlayerBoard(p1,`playerBoardSmall`);
+    createGameBoard(p1); 
     //random attack, save cords
     let cords;
     cords=p2.randomPlay(p1);
@@ -293,18 +403,25 @@ function pveComputerPlay(p1,p2,endTurn){
         if(p1.gb.board[cords.cordX][cords.cordY].isSunk()){
             changeSunkShipColor(p1,p1.gb.board[cords.cordX][cords.cordY]);
             if(p1.gb.checkAllShipsSunk()){
-                boards.innerHTML='';
+                removeCurrentPage();
                 announceWinner();
+                return;
             }
         }else{
             cpuSquare.style.backgroundColor="red";
         }
-        pveComputerPlay(p1,p2,endTurn);
+        //play again
+        pveComputerPlay(p1,p2);
     }else{
         p2.switchTurn(p1);
-        endTurn(p1,p2);
+        setTimeout(nextTurn,3000);
+        function nextTurn(){
+            pveLoop(p1,p2);
+            console.log("waiting 3 sec for computer to play");
+        }
     }
 }
+
 function changeSunkShipColor(p,ship){
     const gameBoardDiv=document.querySelector(".gameBoard");
     let shipArr=[];
@@ -321,4 +438,4 @@ function changeSunkShipColor(p,ship){
 }
 
 
-export {startGameBtnEvent,pvpLoop,changeSunkShipColor};
+export {main,changeSunkShipColor};
