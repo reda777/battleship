@@ -100,6 +100,13 @@ body{
     grid-template-columns: repeat(10,50px);
     grid-template-rows: repeat(10,50px);
 }
+.passDevice{
+    background-color: aliceblue;
+    display: grid;
+    margin: 10px;
+    grid-template-columns: repeat(10,50px);
+    grid-template-rows: repeat(10,50px);
+}
 .pickShip{
     background-color: rgb(159, 176, 190);
     display: grid;

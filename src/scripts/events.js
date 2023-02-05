@@ -1,4 +1,4 @@
-import { createEndturnRestartBtn,createFinishRestartBtn,createStartGameBtn,createGameBoard,createPlayerBoard,announceWinner,showMessage,createShipsToPick,showMainMessage} from "./siteDOM.js";
+import { createPassDevice,createEndturnRestartBtn,createFinishRestartBtn,createStartGameBtn,createGameBoard,createPlayerBoard,announceWinner,showMessage,createShipsToPick,showMainMessage} from "./siteDOM.js";
 import { Gameboard } from "./gameboard.js";
 import { Ship } from "./ship.js";
 import { Player } from "./player.js";
@@ -42,12 +42,14 @@ function startPvpGame(){
     restartBtn.addEventListener("click",restartGame);
 }
 function restartGame(){
-    removeCurrentPage();
+    emptyBoardsClass();
+    emptyMessageClass();
+    emptyPickshipClass();
     main();
 }
 function placeShipLoopPvp(players,playerName){
     //remove current page
-    removeCurrentPage();
+    emptyBoardsClass();
     //add "place a ship" message
     showMessage("Place Ships "+playerName);
     //create ships interface
@@ -60,7 +62,7 @@ function placeShipLoopPvp(players,playerName){
 
 function pickShipEvents(p){
     let currentPlayer=p.p1;
-    let finishBtnFunction=nextPlayerPickShips;
+    let finishBtnFunction=passDeviceToPlaceShips;
     const ships = [
         { name: "twoWide"},
         { name: "threeWide"},
@@ -106,7 +108,7 @@ function pickShipEvents(p){
                 finishBtn.addEventListener('click',finishBtnFunction);
             }
             //remove current page and show new gameboard
-            removeCurrentPage();
+            emptyBoardsClass();
             createPlayerBoard(currentPlayer);
             //keep the selected ship dim
             changeSize(event);
@@ -114,11 +116,19 @@ function pickShipEvents(p){
             console.log(currentPlayer.shipsCount);
         }   
     }
+    function passDeviceToPlaceShips(bool=false){
+        let finishBtnPassDevice=(bool==true)?()=>{finishBtnStartPvpLoop(p);}:nextPlayerPickShips;
+        emptyBoardsClass();
+        emptyMessageClass();
+        createPassDevice();
+        const finishBtn=document.querySelector(".finishBtn");
+        finishBtn.addEventListener('click',finishBtnPassDevice);
+    }
     function nextPlayerPickShips(){
         currentPlayer=p.p2;
-        finishBtnFunction=()=>{finishBtnStartPvpLoop(p);};
+        finishBtnFunction=()=>{passDeviceToPlaceShips(true);};
         //remove current page
-        removeCurrentPage();
+        emptyBoardsClass();
         //add "place a ship" message
         showMessage("Place Ships Player 2");
         //create and show player2 board
@@ -160,11 +170,15 @@ function finishBtnStartPvpLoop(p){
 
     pvpLoop(p.p1,p.p2);
 }
-function removeCurrentPage(){
+function emptyBoardsClass(){
     const boards=document.querySelector(".boards");
-    boards.innerHTML='';
+    boards.innerHTML=''; 
+}
+function emptyPickshipClass(){
     const pickShip = document.querySelector(".pickShip");
     pickShip.innerHTML='';
+}
+function emptyMessageClass(){
     const message=document.querySelector(".message");
     message.innerHTML='';
 }
@@ -182,7 +196,7 @@ function pvpLoop(p1,p2){
 }
 function playerPlay(p1,p2){
     //remove current page 
-    removeCurrentPage();
+    emptyBoardsClass();
     //create enemy board and player board
     createPlayerBoard(p1,`playerBoardSmall`);
     createGameBoard(p2);
@@ -212,7 +226,9 @@ function playerPlay(p1,p2){
             if(p2.gb.board[cords[0]][cords[2]].isSunk()){
                 changeSunkShipColor(p2,p2.gb.board[cords[0]][cords[2]]);
                 if(p2.gb.checkAllShipsSunk()){
-                    removeCurrentPage();
+                    emptyBoardsClass();
+                    emptyMessageClass();
+                    emptyPickshipClass();
                     announceWinner();
                     return;
                 }
@@ -233,10 +249,21 @@ function playerPlay(p1,p2){
             const nextBtn=document.querySelector(".nextBtn");
             nextBtn.addEventListener("click",nextTurn);
             function nextTurn(){
-                pvpLoop(p1,p2);
+                passDevice(p1,p2);
                 nextBtn.removeEventListener("click",nextTurn);
             }
         }
+    }
+}
+function passDevice(p1,p2){
+    emptyBoardsClass();
+    emptyMessageClass();
+    createPassDevice();
+    const nextBtn=document.querySelector(".nextBtn");
+    nextBtn.addEventListener("click",nextTurn);
+    function nextTurn(){
+        pvpLoop(p1,p2);
+        nextBtn.removeEventListener("click",nextTurn);
     }
 }
 function startPveGame(){
@@ -252,7 +279,7 @@ function startPveGame(){
 }
 function placeShipLoopPve(players,playerName){
     //remove current page
-    removeCurrentPage();
+    emptyBoardsClass();
     //add "place a ship" message
     showMessage("Place Ships "+playerName);
     //create ships interface
@@ -310,7 +337,7 @@ function pickShipEventsPve(p){
                 finishBtn.addEventListener('click',finishBtnFunction);
             }
             //remove current page and show new gameboard
-            removeCurrentPage();
+            emptyBoardsClass();
             createPlayerBoard(currentPlayer);
             //keep the selected ship dim
             changeSize(event);
@@ -351,7 +378,7 @@ function pveLoop(p1,p2){
 }
 function playerPlayPve(p1,p2){
     //remove current page 
-    removeCurrentPage();
+    emptyBoardsClass();
     //create enemy board and player board
     createPlayerBoard(p1,`playerBoardSmall`);
     createGameBoard(p2);
@@ -381,7 +408,9 @@ function playerPlayPve(p1,p2){
             if(p2.gb.board[cords[0]][cords[2]].isSunk()){
                 changeSunkShipColor(p2,p2.gb.board[cords[0]][cords[2]]);
                 if(p2.gb.checkAllShipsSunk()){
-                    removeCurrentPage();
+                    emptyBoardsClass();
+                    emptyMessageClass();
+                    emptyPickshipClass();
                     announceWinner();
                     return;
                 }
@@ -411,7 +440,7 @@ function playerPlayPve(p1,p2){
 
 function pveComputerPlay(p1,p2){
     //remove current page 
-    removeCurrentPage();
+    emptyBoardsClass();
     //create enemy board and player board
     createPlayerBoard(p1,`playerBoardSmall`);
     createGameBoard(p1); 
@@ -428,7 +457,9 @@ function pveComputerPlay(p1,p2){
         if(p1.gb.board[cords.cordX][cords.cordY].isSunk()){
             changeSunkShipColor(p1,p1.gb.board[cords.cordX][cords.cordY]);
             if(p1.gb.checkAllShipsSunk()){
-                removeCurrentPage();
+                emptyBoardsClass();
+                emptyMessageClass();
+                emptyPickshipClass();
                 announceWinner();
                 return;
             }

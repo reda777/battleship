@@ -161,4 +161,12 @@ function createPlayerBoard(p,className=`playerBoard`) {
         }
     }
 }
-export {createEndturnRestartBtn,createFinishRestartBtn,createStartGameBtn,createGameBoard,createPlayerBoard,announceWinner,showMessage,createShipsToPick,showMainMessage};
+function createPassDevice(){
+    const boards=document.querySelector(".boards");
+    const passDevice = document.createElement("div");
+    passDevice.classList.add("passDevice");
+    passDevice.textContent="Pass device to player 2";
+    boards.appendChild(passDevice);
+    
+}
+export {createPassDevice,createEndturnRestartBtn,createFinishRestartBtn,createStartGameBtn,createGameBoard,createPlayerBoard,announceWinner,showMessage,createShipsToPick,showMainMessage};
