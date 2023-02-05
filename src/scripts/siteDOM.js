@@ -61,7 +61,8 @@ function createStartGameBtn(){
 function createShipsToPick(){
     // Create the main pickShip div
     const pickShip = document.querySelector(".pickShip");
-
+    //clear element
+    pickShip.innerHTML='';
     // Array of ships
     const ships = [
     { name: "twoWide",size: 2, v: "v 2x2", h: "h 2x2" },

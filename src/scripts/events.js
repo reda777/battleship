@@ -37,6 +37,13 @@ function startPvpGame(){
     createFinishRestartBtn();
     //start placing ships phase
     placeShipLoopPvp(players,"Player 1");
+    //set up restart event
+    const restartBtn=document.querySelector(".restartBtn");
+    restartBtn.addEventListener("click",restartGame);
+}
+function restartGame(){
+    removeCurrentPage();
+    main();
 }
 function placeShipLoopPvp(players,playerName){
     //remove current page
@@ -118,6 +125,9 @@ function pickShipEvents(p){
         createPlayerBoard(currentPlayer);
         //show finish&restart placing ships button
         createFinishRestartBtn();
+        //set up restart event
+        const restartBtn=document.querySelector(".restartBtn");
+        restartBtn.addEventListener("click",restartGame);
     }
     
 }
@@ -144,11 +154,19 @@ function mouseoverShip(e){
     }
 function finishBtnStartPvpLoop(p){
     createEndturnRestartBtn();
+    //set up restart event
+    const restartBtn=document.querySelector(".restartBtn");
+    restartBtn.addEventListener("click",restartGame);
+
     pvpLoop(p.p1,p.p2);
 }
 function removeCurrentPage(){
     const boards=document.querySelector(".boards");
     boards.innerHTML='';
+    const pickShip = document.querySelector(".pickShip");
+    pickShip.innerHTML='';
+    const message=document.querySelector(".message");
+    message.innerHTML='';
 }
 function mouseoverSquare(e){
     if(e.target.classList.contains("hitSquare")) return;
@@ -228,6 +246,9 @@ function startPveGame(){
     createFinishRestartBtn();
     //start placing ships phase
     placeShipLoopPve(players,"Player 1");
+    //set up restart event
+    const restartBtn=document.querySelector(".restartBtn");
+    restartBtn.addEventListener("click",restartGame);
 }
 function placeShipLoopPve(players,playerName){
     //remove current page
@@ -314,6 +335,10 @@ function finishBtnStartPveLoop(p){
     //place ship randomly for computer player
     placeShipsForComputer(p.p2);
     createEndturnRestartBtn();
+    //set up restart event
+    const restartBtn=document.querySelector(".restartBtn");
+    restartBtn.addEventListener("click",restartGame);
+
     pveLoop(p.p1,p.p2);
 }
 function pveLoop(p1,p2){
@@ -414,10 +439,10 @@ function pveComputerPlay(p1,p2){
         pveComputerPlay(p1,p2);
     }else{
         p2.switchTurn(p1);
-        setTimeout(nextTurn,3000);
+        setTimeout(nextTurn,2000);
         function nextTurn(){
             pveLoop(p1,p2);
-            console.log("waiting 3 sec for computer to play");
+            console.log("waiting 2 sec for computer to play");
         }
     }
 }
