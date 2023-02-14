@@ -69,17 +69,20 @@ function pickShipEvents(p){
         { name: "fourWide"},
         { name: "fiveWide"}
     ];
-    let event;
     for (let i = 0; i < ships.length; i++) {
         const ship=document.querySelector(`.${ships[i].name}`);
         ship.addEventListener("click",changeSize);
     }
     function changeSize(e){
-        event=e;
-        const gameBoardDiv=document.querySelector(".playerBoard");
+        emptyBoardsClass();
+        createPlayerBoard(currentPlayer);
         currentPlayer.shipName=e.target.parentNode.getAttribute('class');
         currentPlayer.size=Number(e.target.dataset.size);
         currentPlayer.dir=e.target.getAttribute('class');
+        addMouseOverEvent();
+    }
+    function addMouseOverEvent(){
+        const gameBoardDiv=document.querySelector(".playerBoard");
 
         gameBoardDiv.addEventListener('mouseover', mouseoverShip.bind(currentPlayer));
         gameBoardDiv.addEventListener('mouseout', mouseoverShip.bind(currentPlayer));
@@ -88,7 +91,7 @@ function pickShipEvents(p){
     }
     function placeShipClickEvent(e){
         //number of ships allowed
-        const count=currentPlayer.gb.shipsCount;;
+        const count=currentPlayer.gb.shipsCount;
         let x=Number(e.target.dataset.id[0]);
         let y=Number(e.target.dataset.id[2]);
         let size=currentPlayer.size;
@@ -110,10 +113,12 @@ function pickShipEvents(p){
             //remove current page and show new gameboard
             emptyBoardsClass();
             createPlayerBoard(currentPlayer);
-            //keep the selected ship dim
-            changeSize(event);
+            addMouseOverEvent();
         }else{
             console.log(currentPlayer.shipsCount);
+            emptyBoardsClass();
+            createPlayerBoard(currentPlayer);
+            addMouseOverEvent();
         }   
     }
     function passDeviceToPlaceShips(bool=false){
