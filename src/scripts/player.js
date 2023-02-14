@@ -12,18 +12,23 @@ function createRandomNonHitCords(that){
     }
     return {cordX,cordY};
 }
-function placeInRandom(ship){
-    let cordA=Math.floor(Math.random() * 10);
-    let cordB=Math.floor(Math.random() * 10);
-    let cordC=(Math.random() < 0.5) ? cordA : cordA+ship.length-1;
-    let cordD=(cordC==cordA) ? cordB+ship.length-1 : cordB;
-    while(this.gb.placeShip(ship,cordA,cordB,cordC,cordD)==false || (cordA+ship.length-1>10 || cordB+ship.length-1>10)){
-        cordA=Math.floor(Math.random() * 10);
-        cordB=Math.floor(Math.random() * 10);
-        cordC=Math.random() < 0.5 ? cordA : cordA+ship.length-1;
-        cordD=cordC==cordA ? cordB+ship.length-1 : cordB;
+function createRandomCordsForShip(ship){
+    let a=Math.floor(Math.random() * 10);
+    let b=Math.floor(Math.random() * 10);
+    while((a+ship.length-1>10 || b+ship.length-1>10)){
+        a=Math.floor(Math.random() * 10);
+        b=Math.floor(Math.random() * 10);
     }
-    return {cordA,cordB,cordC,cordD};
+    let c=(Math.random() < 0.5) ? a : a+ship.length-1;
+    let d=(c==a) ? b+ship.length-1 : b;
+    return {a,b,c,d};
+}
+function placeInRandom(ship){
+    let cords=createRandomCordsForShip(ship);
+    while(this.gb.placeShip(ship,cords.a,cords.b,cords.c,cords.d)==false){
+        cords=createRandomCordsForShip(ship);
+    }
+    return cords;
 }
 function Player(gb,t,isAI=false){
     return {

@@ -303,17 +303,20 @@ function pickShipEventsPve(p){
         { name: "fourWide"},
         { name: "fiveWide"}
     ];
-    let event;
     for (let i = 0; i < ships.length; i++) {
         const ship=document.querySelector(`.${ships[i].name}`);
         ship.addEventListener("click",changeSize);
     }
     function changeSize(e){
-        event=e;
-        const gameBoardDiv=document.querySelector(".playerBoard");
+        emptyBoardsClass();
+        createPlayerBoard(currentPlayer);
         currentPlayer.shipName=e.target.parentNode.getAttribute('class');
         currentPlayer.size=Number(e.target.dataset.size);
         currentPlayer.dir=e.target.getAttribute('class');
+        addMouseOverEvent();
+    }
+    function addMouseOverEvent(){
+        const gameBoardDiv=document.querySelector(".playerBoard");
 
         gameBoardDiv.addEventListener('mouseover', mouseoverShip.bind(currentPlayer));
         gameBoardDiv.addEventListener('mouseout', mouseoverShip.bind(currentPlayer));
@@ -344,10 +347,13 @@ function pickShipEventsPve(p){
             //remove current page and show new gameboard
             emptyBoardsClass();
             createPlayerBoard(currentPlayer);
-            //keep the selected ship dim
-            changeSize(event);
+            addMouseOverEvent();
         }else{
             console.log(currentPlayer.shipsCount);
+            //remove current page and show new gameboard
+            emptyBoardsClass();
+            createPlayerBoard(currentPlayer);
+            addMouseOverEvent();
         }   
     }
     
