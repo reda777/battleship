@@ -63,23 +63,26 @@ function placeShipLoopPvp(players,playerName){
 function pickShipEvents(p){
     let currentPlayer=p.p1;
     let finishBtnFunction=passDeviceToPlaceShips;
-    const ships = [
-        { name: "twoWide"},
-        { name: "threeWide"},
-        { name: "fourWide"},
-        { name: "fiveWide"}
-    ];
-    for (let i = 0; i < ships.length; i++) {
-        const ship=document.querySelector(`.${ships[i].name}`);
-        ship.addEventListener("click",changeSize);
-    }
-    function changeSize(e){
-        emptyBoardsClass();
-        createPlayerBoard(currentPlayer);
-        currentPlayer.shipName=e.target.parentNode.getAttribute('class');
-        currentPlayer.size=Number(e.target.dataset.size);
-        currentPlayer.dir=e.target.getAttribute('class');
-        addMouseOverEvent();
+    createPickShipEvents();
+    function createPickShipEvents(){
+        const ships = [
+            { name: "twoWide"},
+            { name: "threeWide"},
+            { name: "fourWide"},
+            { name: "fiveWide"}
+        ];
+        for (let i = 0; i < ships.length; i++) {
+            const ship=document.querySelector(`.${ships[i].name}`);
+            ship.addEventListener("click",changeSize);
+        }
+        function changeSize(e){
+            emptyBoardsClass();
+            createPlayerBoard(currentPlayer);
+            currentPlayer.shipName=e.target.parentNode.getAttribute('class');
+            currentPlayer.size=Number(e.target.dataset.size);
+            currentPlayer.dir=e.target.getAttribute('class');
+            addMouseOverEvent();
+        }
     }
     function addMouseOverEvent(){
         const gameBoardDiv=document.querySelector(".playerBoard");
@@ -121,10 +124,11 @@ function pickShipEvents(p){
             addMouseOverEvent();
         }   
     }
-    function passDeviceToPlaceShips(bool=false){
-        let finishBtnPassDevice=(bool==true)?()=>{finishBtnStartPvpLoop(p);}:nextPlayerPickShips;
+    function passDeviceToPlaceShips(lastPlayer=false){
+        let finishBtnPassDevice=(lastPlayer==true)?()=>{finishBtnStartPvpLoop(p);}:nextPlayerPickShips;
         emptyBoardsClass();
         emptyMessageClass();
+        emptyPickshipClass();
         createPassDevice();
         const finishBtn=document.querySelector(".finishBtn");
         finishBtn.addEventListener('click',finishBtnPassDevice);
@@ -138,6 +142,9 @@ function pickShipEvents(p){
         showMessage("Place Ships Player 2");
         //create and show player2 board
         createPlayerBoard(currentPlayer);
+        //create pick ships ui
+        createShipsToPick();
+        createPickShipEvents();
         //show finish&restart placing ships button
         createFinishRestartBtn();
         //set up restart event
@@ -370,6 +377,8 @@ function placeShipsForComputer(p){
     }
 }
 function finishBtnStartPveLoop(p){
+    emptyMessageClass();
+    emptyPickshipClass();
     //place ship randomly for computer player
     placeShipsForComputer(p.p2);
     createEndturnRestartBtn();

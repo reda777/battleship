@@ -5,7 +5,7 @@ function array2D(n){
 }
 function Gameboard(d=10){
     return {
-        shipsCount: {twoWide:3,threeWide:1,fourWide:0,fiveWide:1}, 
+        shipsCount: {twoWide:1,threeWide:1,fourWide:0,fiveWide:1}, 
         dim: d,
         board: array2D(d),
         hitCords: [],
