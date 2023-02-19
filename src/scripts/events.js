@@ -1,4 +1,4 @@
-import { createPassDevice,createEndturnRestartBtn,createFinishRestartBtn,createStartGameBtn,createGameBoard,createPlayerBoard,announceWinner,showMessage,createShipsToPick,showMainMessage} from "./siteDOM.js";
+import { createPlayerBoardSmall,createPassDevice,createEndturnRestartBtn,createFinishRestartBtn,createStartGameBtn,createGameBoard,createPlayerBoard,announceWinner,showMessage,createShipsToPick,showMainMessage} from "./siteDOM.js";
 import { Gameboard } from "./gameboard.js";
 import { Ship } from "./ship.js";
 import { Player } from "./player.js";
@@ -210,7 +210,7 @@ function playerPlay(p1,p2){
     //remove current page 
     emptyBoardsClass();
     //create enemy board and player board
-    createPlayerBoard(p1,`playerBoardSmall`);
+    createPlayerBoardSmall(p1);
     createGameBoard(p2);
     //select gameboard div
     const gameBoardDiv=document.querySelector(".gameBoard");
@@ -400,7 +400,7 @@ function playerPlayPve(p1,p2){
     //remove current page 
     emptyBoardsClass();
     //create enemy board and player board
-    createPlayerBoard(p1,`playerBoardSmall`);
+    createPlayerBoardSmall(p1);
     createGameBoard(p2);
     //select gameboard div
     const gameBoardDiv=document.querySelector(".gameBoard");
@@ -462,7 +462,7 @@ function pveComputerPlay(p1,p2){
     //remove current page 
     emptyBoardsClass();
     //create enemy board and player board
-    createPlayerBoard(p1,`playerBoardSmall`);
+    createPlayerBoardSmall(p1);
     createGameBoard(p1); 
     //random attack, save cords
     let cords;
