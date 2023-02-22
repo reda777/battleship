@@ -1,5 +1,5 @@
-import {main} from "./events.js";
+import { main } from "./events.js";
 
-(function gameLoop(){
-    main();
+(function gameLoop() {
+  main();
 })();

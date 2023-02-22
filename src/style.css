@@ -1,10 +1,11 @@
-body{
+body {
     margin: 0;
     min-height: 100vh;
     display: flex;
 }
+
 /*left*/
-.left{
+.left {
     background-color: gray;
     width: 30%;
     display: flex;
@@ -12,51 +13,59 @@ body{
     justify-content: flex-start;
     align-items: center;
 }
-.header{
+
+.header {
     background-color: rgb(126, 126, 182);
     margin: 6px;
     width: 85%;
     height: 150px;
 }
-.gameMode{
+
+.gameMode {
     background-color: bisque;
     width: 75%;
     height: 120px;
     margin: 6px;
 }
-.hideBtn{
+
+.hideBtn {
     display: none;
 }
-.pvpBtn{
+
+.pvpBtn {
     background-color: blueviolet;
     margin: 8px 0;
     width: 100%;
     height: calc(60px - 8px);
     cursor: pointer;
 }
-.pveBtn{
+
+.pveBtn {
     background-color: rgb(71, 44, 8);
     margin: 8px 0;
     width: 100%;
     height: calc(60px - 8px);
     cursor: pointer;
 }
-.restartBtn{
+
+.restartBtn {
     background-color: rgb(43, 70, 226);
     margin: 8px 0;
     width: 100%;
     height: calc(60px - 8px);
     cursor: pointer;
 }
-.nextBtn{
+
+.nextBtn {
     background-color: rgb(8, 61, 71);
     margin: 8px 0;
     width: 100%;
     height: calc(60px - 8px);
     cursor: pointer;
 }
+
 /*right*/
-.right{
+.right {
     background-color: rgb(146, 146, 146);
     width: 70%;
     display: flex;
@@ -64,93 +73,112 @@ body{
     justify-content: flex-start;
     align-items: center;
 }
-.displayNon{
+
+.displayNon {
     display: none;
 }
-.mainMessage{
-    height:520px;
+
+.mainMessage {
+    height: 520px;
 }
-.boards{
+
+.boards {
     background-color: coral;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: flex-start;
 }
-.message{
+
+.message {
     width: 100%;
     display: flex;
     justify-content: center;
 }
-.messageContent{
+
+.messageContent {
     text-decoration: dashed;
 }
 
-.playerBoardSmall{
+.playerBoardSmall {
     background-color: aliceblue;
     display: grid;
     margin: 10px;
-    grid-template-columns: repeat(10,20px);
-    grid-template-rows: repeat(10,20px);
+    grid-template-columns: repeat(10, 20px);
+    grid-template-rows: repeat(10, 20px);
 }
-.gameBoard, .playerBoard{
+
+.gameBoard,
+.playerBoard {
     background-color: aliceblue;
     display: grid;
     margin: 10px;
-    grid-template-columns: repeat(10,50px);
-    grid-template-rows: repeat(10,50px);
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
 }
-.passDevice{
+
+.passDevice {
     background-color: aliceblue;
     display: grid;
     margin: 10px;
-    grid-template-columns: repeat(10,50px);
-    grid-template-rows: repeat(10,50px);
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
 }
-.pickShip{
+
+.pickShip {
     background-color: rgb(159, 176, 190);
     display: grid;
-    grid-template-columns: repeat(2,250px);
-    grid-template-rows: repeat(2,50px);
+    grid-template-columns: repeat(2, 250px);
+    grid-template-rows: repeat(2, 50px);
 }
-.square, .playerSquare{
+
+.square,
+.playerSquare {
     border: 1px solid black;
 }
-.squareStyled{
+
+.squareStyled {
     cursor: pointer;
     background-color: rgb(238, 225, 206);
 }
-.hitSquare{
+
+.hitSquare {
     position: relative;
 }
-.hitSquare:after{
+
+.hitSquare:after {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    content: "\00d7"; /* use the hex value here... */
-    font-size: 80px; 
+    content: "\00d7";
+    /* use the hex value here... */
+    font-size: 80px;
     color: rgb(0, 0, 0);
     line-height: 50px;
     text-align: center;
 }
-.hitPlayerSquareSmall{
+
+.hitPlayerSquareSmall {
     position: relative;
 }
-.hitPlayerSquareSmall:after{
+
+.hitPlayerSquareSmall:after {
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    content: "\00d7"; /* use the hex value here... */
-    font-size: 32px; 
+    content: "\00d7";
+    /* use the hex value here... */
+    font-size: 32px;
     color: rgb(0, 0, 0);
     line-height: 18px;
     text-align: center;
 }
-.pickShip > div{
+
+.pickShip>div {
     background-color: blueviolet;
     margin: 5px;
 }
