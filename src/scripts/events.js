@@ -41,6 +41,13 @@ function main() {
   pvpBtn.addEventListener("click", startPvpGame);
   pveBtn.addEventListener("click", startPveGame);
 }
+function checkHitCords(p, x, y) {
+  const hitCords = p.gb.hitCords;
+  for (let i = 0; i < hitCords.length; i++) {
+    if (hitCords[i][0] == x && hitCords[i][1] == y) return true;
+  }
+  return false;
+}
 function startPvpGame() {
   //create players
   const players = createPvpPlayers();
@@ -70,7 +77,6 @@ function placeShipLoopPvp(players, playerName) {
   //create pick ship event
   pickShipEvents(players);
 }
-
 function pickShipEvents(p) {
   let currentPlayer = p.p1;
   let finishBtnFunction = passDeviceToPlaceShips;
@@ -259,48 +265,49 @@ function playerPlay(p1, p2) {
   function attackSquare(e) {
     //get clicked cords from the element's data-id
     const cords = e.target.dataset.id;
-    //check if cords already clicked
-    if (
-      checkHitCords(p2,cords[0],cords[2])
-    ) {
-      gameBoardDiv.addEventListener("click", attackSquare, { once: true });
-      return;
-    }
-    //send attack to the enemy
-    p2.gb.receiveAttack(cords[0], cords[2]);
-    //add X to the attacked square
-    e.target.classList.add("hitSquare");
-    //if square is a ship
-    if (p2.gb.board[cords[0]][cords[2]] != undefined) {
-      //if all ship squares are attacked
-      if (p2.gb.board[cords[0]][cords[2]].isSunk()) {
-        changeSunkShipColor(p2, p2.gb.board[cords[0]][cords[2]]);
-        if (p2.gb.checkAllShipsSunk()) {
-          emptyBoardsClass();
-          emptyMessageClass();
-          emptyPickshipClass();
-          announceWinner();
-          return;
+    if (cords != null) {
+      const checkCords = checkHitCords(p2, cords[0], cords[2]);
+      if (checkCords == false) {
+        //send attack to the enemy
+        p2.gb.receiveAttack(cords[0], cords[2]);
+        //add X to the attacked square
+        e.target.classList.add("hitSquare");
+        //if square is a ship
+        if (p2.gb.board[cords[0]][cords[2]] != undefined) {
+          //if all ship squares are attacked
+          if (p2.gb.board[cords[0]][cords[2]].isSunk()) {
+            changeSunkShipColor(p2, p2.gb.board[cords[0]][cords[2]]);
+            if (p2.gb.checkAllShipsSunk()) {
+              emptyBoardsClass();
+              emptyMessageClass();
+              emptyPickshipClass();
+              announceWinner();
+              return;
+            }
+          } else {
+            e.target.style.backgroundColor = "red";
+          }
+          gameBoardDiv.removeEventListener("mouseover", mouseoverSquare);
+          gameBoardDiv.removeEventListener("mouseout", mouseoverSquare);
+          //remove hover class
+          e.target.classList.toggle("squareStyled");
+          //play again
+          playerPlay(p1, p2);
+        } else {
+          gameBoardDiv.removeEventListener("mouseover", mouseoverSquare);
+          gameBoardDiv.removeEventListener("mouseout", mouseoverSquare);
+          e.target.classList.toggle("squareStyled");
+          p1.switchTurn(p2);
+          const nextBtn = document.querySelector(".nextBtn");
+          nextBtn.addEventListener("click", nextTurn);
+          function nextTurn() {
+            passDevice(p1, p2);
+            nextBtn.removeEventListener("click", nextTurn);
+          }
         }
       } else {
-        e.target.style.backgroundColor = "red";
-      }
-      gameBoardDiv.removeEventListener("mouseover", mouseoverSquare);
-      gameBoardDiv.removeEventListener("mouseout", mouseoverSquare);
-      //remove hover class
-      e.target.classList.toggle("squareStyled");
-      //play again
-      playerPlay(p1, p2);
-    } else {
-      gameBoardDiv.removeEventListener("mouseover", mouseoverSquare);
-      gameBoardDiv.removeEventListener("mouseout", mouseoverSquare);
-      e.target.classList.toggle("squareStyled");
-      p1.switchTurn(p2);
-      const nextBtn = document.querySelector(".nextBtn");
-      nextBtn.addEventListener("click", nextTurn);
-      function nextTurn() {
-        passDevice(p1, p2);
-        nextBtn.removeEventListener("click", nextTurn);
+        gameBoardDiv.addEventListener("click", attackSquare, { once: true });
+        return;
       }
     }
   }
@@ -453,16 +460,7 @@ function pveLoop(p1, p2) {
     pveComputerPlay(p1, p2);
   }
 }
-function checkHitCords(that,x,y){
-  const hitCords=that.gb.hitCords;
-  for(let i=0;i<hitCords.length;i++){
-    if(hitCords[i][0]==x && hitCords[i][1]==y){
-      return true;
-    }else{
-      return false;
-    }
-  }
-}
+
 function playerPlayPve(p1, p2) {
   //remove current page
   emptyBoardsClass();
@@ -480,48 +478,51 @@ function playerPlayPve(p1, p2) {
   function attackSquare(e) {
     //get clicked cords from the element's data-id
     const cords = e.target.dataset.id;
-    //check if cords already clicked
-    if (
-      checkHitCords(p2,cords[0],cords[2])
-    ) {
-      gameBoardDiv.addEventListener("click", attackSquare, { once: true });
-      return;
-    }
-    //send attack to the enemy
-    p2.gb.receiveAttack(cords[0], cords[2]);
-    //add X to the attacked square
-    e.target.classList.add("hitSquare");
-    //if square is a ship
-    if (p2.gb.board[cords[0]][cords[2]] != undefined) {
-      //if all ship squares are attacked
-      if (p2.gb.board[cords[0]][cords[2]].isSunk()) {
-        changeSunkShipColor(p2, p2.gb.board[cords[0]][cords[2]]);
-        if (p2.gb.checkAllShipsSunk()) {
-          emptyBoardsClass();
-          emptyMessageClass();
-          emptyPickshipClass();
-          announceWinner();
-          return;
+    //check if player clicked a square in gameboard
+    if (cords != null) {
+      const checkCords = checkHitCords(p2, cords[0], cords[2]);
+      console.log(checkCords);
+      if (checkCords == false) {
+        //send attack to the enemy
+        p2.gb.receiveAttack(cords[0], cords[2]);
+        //add X to the attacked square
+        e.target.classList.add("hitSquare");
+        //if square is a ship
+        if (p2.gb.board[cords[0]][cords[2]] != undefined) {
+          //if all ship squares are attacked
+          if (p2.gb.board[cords[0]][cords[2]].isSunk()) {
+            changeSunkShipColor(p2, p2.gb.board[cords[0]][cords[2]]);
+            if (p2.gb.checkAllShipsSunk()) {
+              emptyBoardsClass();
+              emptyMessageClass();
+              emptyPickshipClass();
+              announceWinner();
+              return;
+            }
+          } else {
+            e.target.style.backgroundColor = "red";
+          }
+          gameBoardDiv.removeEventListener("mouseover", mouseoverSquare);
+          gameBoardDiv.removeEventListener("mouseout", mouseoverSquare);
+          //remove hover class
+          e.target.classList.toggle("squareStyled");
+          //play again
+          playerPlayPve(p1, p2);
+        } else {
+          gameBoardDiv.removeEventListener("mouseover", mouseoverSquare);
+          gameBoardDiv.removeEventListener("mouseout", mouseoverSquare);
+          e.target.classList.toggle("squareStyled");
+          p1.switchTurn(p2);
+          const nextBtn = document.querySelector(".nextBtn");
+          nextBtn.addEventListener("click", nextTurn);
+          function nextTurn() {
+            pveLoop(p1, p2);
+            nextBtn.removeEventListener("click", nextTurn);
+          }
         }
       } else {
-        e.target.style.backgroundColor = "red";
-      }
-      gameBoardDiv.removeEventListener("mouseover", mouseoverSquare);
-      gameBoardDiv.removeEventListener("mouseout", mouseoverSquare);
-      //remove hover class
-      e.target.classList.toggle("squareStyled");
-      //play again
-      playerPlayPve(p1, p2);
-    } else {
-      gameBoardDiv.removeEventListener("mouseover", mouseoverSquare);
-      gameBoardDiv.removeEventListener("mouseout", mouseoverSquare);
-      e.target.classList.toggle("squareStyled");
-      p1.switchTurn(p2);
-      const nextBtn = document.querySelector(".nextBtn");
-      nextBtn.addEventListener("click", nextTurn);
-      function nextTurn() {
-        pveLoop(p1, p2);
-        nextBtn.removeEventListener("click", nextTurn);
+        gameBoardDiv.addEventListener("click", attackSquare, { once: true });
+        return;
       }
     }
   }
