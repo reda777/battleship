@@ -50,12 +50,12 @@ function createStartGameBtn() {
 
   const pvpBtn = document.createElement("div");
   pvpBtn.classList.add("pvpBtn");
-  pvpBtn.textContent = "Start Game pvp";
+  pvpBtn.textContent = "Play PvP";
   gameMode.appendChild(pvpBtn);
 
   const pveBtn = document.createElement("div");
   pveBtn.classList.add("pveBtn");
-  pveBtn.textContent = "Start Game pve";
+  pveBtn.textContent = "Play PvE";
   gameMode.appendChild(pveBtn);
 }
 function createShipsToPick() {

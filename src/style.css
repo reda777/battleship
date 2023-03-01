@@ -1,3 +1,67 @@
+@font-face {
+    font-family: 'action_manregular';
+    src: url('fonts/actionman_regular_macroman/Action_Man-webfont.woff') format('woff'),
+        url('fonts/actionman_regular_macroman/Action_Man-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'action_man_extendedregular';
+    src: url('fonts/actionmanextended_regular_macroman/Action_Man_Extended-webfont.woff') format('woff'),
+        url('fonts/actionmanextended_regular_macroman/Action_Man_Extended-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'permanent_markerregular';
+    src: url('fonts/permanentmarker_regular_macroman/PermanentMarker-webfont.woff') format('woff'),
+        url('fonts/permanentmarker_regular_macroman/PermanentMarker-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sf_arch_rivalregular';
+    src: url('fonts/sfarchrival_regular_macroman/SF_Arch_Rival-webfont.woff') format('woff'),
+        url('fonts/sfarchrival_regular_macroman/SF_Arch_Rival-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'sf_arch_rival_extendedregular';
+    src: url('fonts/sfarchrivalextended_regular_macroman/SF_Arch_Rival_Extended-webfont.woff') format('woff'),
+        url('fonts/sfarchrivalextended_regular_macroman/SF_Arch_Rival_Extended-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.lightTheme {
+    --main-bg-color: #fffcf0;
+    --main-font-color: #202020;
+    --pvp-btn-bg-color: #233a86;
+    --pve-btn-bg-color: #6b1a1a;
+    --ui-btn-bg-color: #4d1e68;
+    --ui-btn-bg-hover-color: #752f9e;
+    --pvp-btn-bg-hover-color: #2d4baf;
+    --pve-btn-bg-hover-color: #a32828;
+    --btn-text-color: #fffcf0;
+}
+
+.darkTheme {
+    --main-bg-color: #202020;
+    --main-font-color: #d4cdb1;
+    --pvp-btn-bg-color: #233a86;
+    --pve-btn-bg-color: #6b1a1a;
+    --ui-btn-bg-color: #4d1e68;
+    --ui-btn-bg-hover-color: #752f9e;
+    --pvp-btn-bg-hover-color: #2d4baf;
+    --pve-btn-bg-hover-color: #a32828;
+    --btn-text-color: #d4cdb1;
+}
+
 body {
     margin: 0;
     min-height: 100vh;
@@ -6,23 +70,27 @@ body {
 
 /*left*/
 .left {
-    background-color: gray;
+    background-color: var(--main-bg-color);
     width: 30%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    font-family: 'permanent_markerregular';
+    color: var(--main-font-color);
 }
 
 .header {
-    background-color: rgb(126, 126, 182);
     margin: 6px;
     width: 85%;
     height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 42px;
 }
 
 .gameMode {
-    background-color: bisque;
     width: 75%;
     height: 120px;
     margin: 6px;
@@ -32,36 +100,50 @@ body {
     display: none;
 }
 
-.pvpBtn {
-    background-color: blueviolet;
+.pvpBtn,
+.pveBtn,
+.restartBtn,
+.nextBtn,
+.finishBtn {
     margin: 8px 0;
     width: 100%;
     height: calc(60px - 8px);
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    border-radius: 5px;
+    color: var(--btn-text-color);
+}
+
+.pvpBtn {
+    background-color: var(--pvp-btn-bg-color);
+
+}
+
+.pvpBtn:hover {
+    background-color: var(--pvp-btn-bg-hover-color);
 }
 
 .pveBtn {
-    background-color: rgb(71, 44, 8);
-    margin: 8px 0;
-    width: 100%;
-    height: calc(60px - 8px);
-    cursor: pointer;
+    background-color: var(--pve-btn-bg-color);
 }
 
-.restartBtn {
-    background-color: rgb(43, 70, 226);
-    margin: 8px 0;
-    width: 100%;
-    height: calc(60px - 8px);
-    cursor: pointer;
+.pveBtn:hover {
+    background-color: var(--pve-btn-bg-hover-color);
 }
 
-.nextBtn {
-    background-color: rgb(8, 61, 71);
-    margin: 8px 0;
-    width: 100%;
-    height: calc(60px - 8px);
-    cursor: pointer;
+.restartBtn:hover,
+.nextBtn:hover,
+.finishBtn:hover {
+    background-color: var(--ui-btn-bg-hover-color);
+}
+
+.restartBtn,
+.nextBtn,
+.finishBtn {
+    background-color: var(--ui-btn-bg-color);
 }
 
 /*right*/
