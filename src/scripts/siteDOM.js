@@ -58,7 +58,86 @@ function createStartGameBtn() {
   pveBtn.textContent = "Play PvE";
   gameMode.appendChild(pveBtn);
 }
-function createShipsToPick() {
+function createShipsToPick(selectedHead = "horizontal") {
+  // Create the main pickShip div
+  const container = document.querySelector(".pickShip");
+  //clear element
+  container.innerHTML = "";
+
+  const head = document.createElement("div");
+  head.classList.add("head");
+
+  const headChildHor = document.createElement("div");
+  headChildHor.classList.add("headChild");
+  headChildHor.dataset.dir = "horizontal";
+  if (selectedHead == "horizontal") {
+    headChildHor.classList.add("selectedHead");
+  }
+  headChildHor.innerText = "Horizontal";
+  head.appendChild(headChildHor);
+
+  const headChildVer = document.createElement("div");
+  headChildVer.classList.add("headChild");
+  headChildVer.dataset.dir = "vertical";
+  if (selectedHead == "vertical") {
+    headChildVer.classList.add("selectedHead");
+  }
+  headChildVer.innerText = "Vertical";
+  head.appendChild(headChildVer);
+
+  container.appendChild(head);
+
+  const content = document.createElement("div");
+  content.classList.add("content");
+
+  const shipSizes = [2, 3, 4, 5];
+  const shipNames = ["twoWide", "threeWide", "fourWide", "fiveWide"];
+  for (let i = 0; i < shipSizes.length; i++) {
+    const shipContainer = document.createElement("div");
+    shipContainer.classList.add("shipContainer");
+    shipContainer.dataset.size = `${shipSizes[i]}`;
+    shipContainer.dataset.shipName = `${shipNames[i]}`;
+
+    const num = document.createElement("div");
+    num.classList.add("num");
+    num.innerText = shipSizes[i];
+    shipContainer.appendChild(num);
+
+    const art = svgLine(selectedHead);
+    shipContainer.appendChild(art);
+
+    content.appendChild(shipContainer);
+  }
+
+  container.appendChild(content);
+
+  return container;
+}
+function svgLine(dir) {
+  const art = document.createElement("div");
+  art.classList.add("art");
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  if (dir == "horizontal") {
+    svg.setAttribute("width", "100px");
+    svg.setAttribute("height", "20px");
+  } else if (dir == "vertical") {
+    svg.setAttribute("width", "20px");
+    svg.setAttribute("height", "100px");
+  }
+
+  const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  rect.setAttribute("x", "0");
+  rect.setAttribute("y", "0");
+  rect.setAttribute("width", "100%");
+  rect.setAttribute("height", "100%");
+  rect.setAttribute("fill", "#240d31");
+
+  svg.appendChild(rect);
+  art.appendChild(svg);
+  return art;
+}
+
+function createShipsToPickV2() {
   // Create the main pickShip div
   const pickShip = document.querySelector(".pickShip");
   //clear element

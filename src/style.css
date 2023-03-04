@@ -45,9 +45,11 @@
     --pve-btn-bg-color: #6b1a1a;
     --ui-btn-bg-color: #4d1e68;
     --ui-btn-bg-hover-color: #752f9e;
+    --ui-btn-bg-selected-color: #240d31;
     --pvp-btn-bg-hover-color: #2d4baf;
     --pve-btn-bg-hover-color: #a32828;
     --btn-text-color: #fffcf0;
+    --theme-content-border-color: #151616;
 }
 
 .darkTheme {
@@ -168,11 +170,13 @@ body {
     align-items: flex-start;
     height: 520px;
 }
+
 .mainMessage,
 .passDevice {
     height: 100%;
     font-size: 32px;
 }
+
 .message {
     width: 100%;
     display: flex;
@@ -189,48 +193,57 @@ body {
     grid-template-columns: repeat(10, 20px);
     grid-template-rows: repeat(10, 20px);
 }
+
 .square,
 .playerSquare {
     border: 1px solid black;
 }
+
 .playerBoardSmall [data-id="0,0"],
 .gameBoard [data-id="0,0"],
-.playerBoard [data-id="0,0"]{
+.playerBoard [data-id="0,0"] {
     border-top-left-radius: 10px;
 }
+
 .playerBoardSmall [data-id="9,0"],
 .gameBoard [data-id="9,0"],
-.playerBoard [data-id="9,0"]{
+.playerBoard [data-id="9,0"] {
     border-top-right-radius: 10px;
 }
+
 .playerBoardSmall [data-id="0,9"],
 .gameBoard [data-id="0,9"],
-.playerBoard [data-id="0,9"]{
+.playerBoard [data-id="0,9"] {
     border-bottom-left-radius: 10px;
 }
+
 .playerBoardSmall [data-id="9,9"],
 .gameBoard [data-id="9,9"],
-.playerBoard [data-id="9,9"]{
+.playerBoard [data-id="9,9"] {
     border-bottom-right-radius: 10px;
 }
+
 .playerBoardSmall [data-id^="0,"],
 .gameBoard [data-id^="0,"],
-.playerBoard [data-id^="0,"]{
+.playerBoard [data-id^="0,"] {
     border-left: 2px solid black;
 }
+
 .playerBoardSmall [data-id$=",0"],
 .gameBoard [data-id$=",0"],
-.playerBoard [data-id$=",0"]{
+.playerBoard [data-id$=",0"] {
     border-top: 2px solid black;
 }
+
 .playerBoardSmall [data-id$=",9"],
 .gameBoard [data-id$=",9"],
-.playerBoard [data-id$=",9"]{
+.playerBoard [data-id$=",9"] {
     border-bottom: 2px solid black;
 }
+
 .playerBoardSmall [data-id^="9,"],
 .gameBoard [data-id^="9,"],
-.playerBoard [data-id^="9,"]{
+.playerBoard [data-id^="9,"] {
     border-right: 2px solid black;
 }
 
@@ -243,11 +256,80 @@ body {
 }
 
 .pickShip {
-    background-color: rgb(159, 176, 190);
     display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 10px;
+    margin-left: 10px;
+    overflow: hidden;
+    border-radius: 5px;
+    color: var(--btn-text-color);
+}
+
+.head {
+    display: flex;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+}
+
+.headChild {
+    background-color: var(--ui-btn-bg-color);
+    width: 50%;
+}
+
+.headChild:hover {
+    cursor: pointer;
+    background-color: var(--ui-btn-bg-hover-color);
+    user-select: none;
+}
+
+.selectedHead {
+    background-color: var(--ui-btn-bg-selected-color);
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: rgb(88, 24, 126);
     width: 100%;
 }
 
+.shipContainer {
+    font-family: 'sf_arch_rivalregular';
+    display: flex;
+    width: calc(50% - 1px);
+    font-size: 60px;
+    height: 150px;
+    border: 1px solid var(--theme-content-border-color);
+    border-top-width: 0;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-right-width: 0;
+}
+
+.shipContainer:hover {
+    background-color: var(--ui-btn-bg-hover-color);
+    cursor: pointer;
+    user-select: none;
+}
+
+.num {
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.art {
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+    padding: 0 5px 0 5px;
+}
 
 
 .squareStyled {
@@ -289,9 +371,4 @@ body {
     color: rgb(0, 0, 0);
     line-height: 18px;
     text-align: center;
-}
-
-.pickShip>div {
-    background-color: blueviolet;
-    margin: 5px;
 }

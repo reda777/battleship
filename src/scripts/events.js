@@ -77,27 +77,35 @@ function placeShipLoopPvp(players, playerName) {
   //create pick ship event
   pickShipEvents(players);
 }
+
 function pickShipEvents(p) {
   let currentPlayer = p.p1;
   let finishBtnFunction = passDeviceToPlaceShips;
+  createChangeDirEvents();
+  function createChangeDirEvents() {
+    const dirs = document.querySelectorAll(".headChild");
+    dirs.forEach((dir) => {
+      dir.addEventListener("click", changeDir);
+    });
+    function changeDir(e) {
+      if (e.currentTarget.dataset.dir != undefined) {
+        createShipsToPick(e.currentTarget.dataset.dir);
+        pickShipEvents(p);
+      }
+    }
+  }
   createPickShipEvents();
   function createPickShipEvents() {
-    const ships = [
-      { name: "twoWide" },
-      { name: "threeWide" },
-      { name: "fourWide" },
-      { name: "fiveWide" },
-    ];
-    for (let i = 0; i < ships.length; i++) {
-      const ship = document.querySelector(`.${ships[i].name}`);
+    const ships = document.querySelectorAll(".shipContainer");
+    ships.forEach((ship) => {
       ship.addEventListener("click", changeSize);
-    }
+    });
     function changeSize(e) {
       emptyBoardsClass();
       createPlayerBoard(currentPlayer);
-      currentPlayer.shipName = e.target.parentNode.getAttribute("class");
-      currentPlayer.size = Number(e.target.dataset.size);
-      currentPlayer.dir = e.target.getAttribute("class");
+      currentPlayer.shipName = e.currentTarget.dataset.shipName;
+      currentPlayer.size = Number(e.currentTarget.dataset.size);
+      currentPlayer.dir = document.querySelector(".selectedHead").dataset.dir;
       addMouseOverEvent();
     }
   }
@@ -147,7 +155,6 @@ function pickShipEvents(p) {
       createPlayerBoard(currentPlayer);
       addMouseOverEvent();
     } else {
-      console.log(currentPlayer.shipsCount);
       emptyBoardsClass();
       createPlayerBoard(currentPlayer);
       addMouseOverEvent();
@@ -351,23 +358,33 @@ function pickShipEventsPve(p) {
   let finishBtnFunction = () => {
     finishBtnStartPveLoop(p);
   };
-  const ships = [
-    { name: "twoWide" },
-    { name: "threeWide" },
-    { name: "fourWide" },
-    { name: "fiveWide" },
-  ];
-  for (let i = 0; i < ships.length; i++) {
-    const ship = document.querySelector(`.${ships[i].name}`);
-    ship.addEventListener("click", changeSize);
+  createChangeDirEvents();
+  function createChangeDirEvents() {
+    const dirs = document.querySelectorAll(".headChild");
+    dirs.forEach((dir) => {
+      dir.addEventListener("click", changeDir);
+    });
+    function changeDir(e) {
+      if (e.currentTarget.dataset.dir != undefined) {
+        createShipsToPick(e.currentTarget.dataset.dir);
+        pickShipEventsPve(p);
+      }
+    }
   }
-  function changeSize(e) {
-    emptyBoardsClass();
-    createPlayerBoard(currentPlayer);
-    currentPlayer.shipName = e.target.parentNode.getAttribute("class");
-    currentPlayer.size = Number(e.target.dataset.size);
-    currentPlayer.dir = e.target.getAttribute("class");
-    addMouseOverEvent();
+  createPickShipEvents();
+  function createPickShipEvents() {
+    const ships = document.querySelectorAll(".shipContainer");
+    ships.forEach((ship) => {
+      ship.addEventListener("click", changeSize);
+    });
+    function changeSize(e) {
+      emptyBoardsClass();
+      createPlayerBoard(currentPlayer);
+      currentPlayer.shipName = e.currentTarget.dataset.shipName;
+      currentPlayer.size = Number(e.currentTarget.dataset.size);
+      currentPlayer.dir = document.querySelector(".selectedHead").dataset.dir;
+      addMouseOverEvent();
+    }
   }
   function addMouseOverEvent() {
     const gameBoardDiv = document.querySelector(".playerBoard");
@@ -415,7 +432,6 @@ function pickShipEventsPve(p) {
       createPlayerBoard(currentPlayer);
       addMouseOverEvent();
     } else {
-      console.log(currentPlayer.shipsCount);
       //remove current page and show new gameboard
       emptyBoardsClass();
       createPlayerBoard(currentPlayer);
@@ -481,7 +497,6 @@ function playerPlayPve(p1, p2) {
     //check if player clicked a square in gameboard
     if (cords != null) {
       const checkCords = checkHitCords(p2, cords[0], cords[2]);
-      console.log(checkCords);
       if (checkCords == false) {
         //send attack to the enemy
         p2.gb.receiveAttack(cords[0], cords[2]);
