@@ -187,9 +187,9 @@ function createPlayerBoard(p) {
 }
 function createPassDevice() {
   const boards = document.querySelector(".boards");
-  const passDevice = document.createElement("div");
+  const passDevice = document.createElement("h3");
   passDevice.classList.add("passDevice");
-  passDevice.textContent = "Pass device to player 2";
+  passDevice.textContent = "Pass Device";
   boards.appendChild(passDevice);
 }
 export {
