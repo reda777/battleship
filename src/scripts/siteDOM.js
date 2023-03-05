@@ -136,44 +136,6 @@ function svgLine(dir) {
   art.appendChild(svg);
   return art;
 }
-
-function createShipsToPickV2() {
-  // Create the main pickShip div
-  const pickShip = document.querySelector(".pickShip");
-  //clear element
-  pickShip.innerHTML = "";
-  // Array of ships
-  const ships = [
-    { name: "twoWide", size: 2, v: "v 2x2", h: "h 2x2" },
-    { name: "threeWide", size: 3, v: "v 3x3", h: "h 3x3" },
-    { name: "fourWide", size: 4, v: "v 4x4", h: "h 4x4" },
-    { name: "fiveWide", size: 5, v: "v 5x5", h: "h 5x5" },
-  ];
-
-  // Iterate through the ships array
-  for (let i = 0; i < ships.length; i++) {
-    // Create the outer div with the size class
-    const outerDiv = document.createElement("div");
-    outerDiv.classList.add(ships[i].name);
-
-    // Create the vertical div
-    const verticalDiv = document.createElement("div");
-    verticalDiv.classList.add("vertical");
-    verticalDiv.dataset.size = ships[i].size;
-    verticalDiv.textContent = ships[i].v;
-    outerDiv.appendChild(verticalDiv);
-
-    // Create the horizontal div
-    const horizontalDiv = document.createElement("div");
-    horizontalDiv.classList.add("horizontal");
-    horizontalDiv.dataset.size = ships[i].size;
-    horizontalDiv.textContent = ships[i].h;
-    outerDiv.appendChild(horizontalDiv);
-
-    // Append the outer div to the pickShip div
-    pickShip.appendChild(outerDiv);
-  }
-}
 function createGameBoard(p) {
   const boards = document.querySelector(".boards");
   const gameBoard = document.createElement("div");
@@ -205,9 +167,12 @@ function createGameBoard(p) {
     }
   }
 }
-function announceWinner() {
-  const boards = document.querySelector(".boards");
-  boards.textContent = "YOU WIN";
+function announceWinner(cpuWon = false) {
+  if (cpuWon) {
+    showMainMessage("You Lose");
+    return;
+  }
+  showMainMessage("You Win");
 }
 function createPlayerBoardSmall(p) {
   const boards = document.querySelector(".boards");

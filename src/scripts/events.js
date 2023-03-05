@@ -567,7 +567,7 @@ function pveComputerPlay(p1, p2) {
         emptyBoardsClass();
         emptyMessageClass();
         emptyPickshipClass();
-        announceWinner();
+        announceWinner(true);
         return;
       }
     } else {
