@@ -69,7 +69,7 @@ function placeShipLoopPvp(players, playerName) {
   //remove current page
   emptyBoardsClass();
   //add "place a ship" message
-  showMessage("Place Ships " + playerName);
+  showMessage(playerName + " Place Ships");
   //create ships interface
   createShipsToPick();
   //create and show player1 board
@@ -182,7 +182,7 @@ function pickShipEvents(p) {
     //remove current page
     emptyBoardsClass();
     //add "place a ship" message
-    showMessage("Place Ships Player 2");
+    showMessage("Player 2 Place Ships");
     //create and show player2 board
     createPlayerBoard(currentPlayer);
     //create pick ships ui
@@ -345,7 +345,7 @@ function placeShipLoopPve(players, playerName) {
   //remove current page
   emptyBoardsClass();
   //add "place a ship" message
-  showMessage("Place Ships " + playerName);
+  showMessage(playerName + " Place Ships");
   //create ships interface
   createShipsToPick();
   //create and show player1 board

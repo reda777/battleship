@@ -194,9 +194,9 @@ function createGameBoard(p) {
       if (p.gb.hitCords.some((cords) => cords[0] == i && cords[1] == j)) {
         square.classList.add("hitSquare");
         if (p.gb.board[i][j] != undefined) {
-          square.style.backgroundColor = "#4d1e68";
+          square.classList.add("shipColor");
           if (p.gb.board[i][j].isSunk()) {
-            square.style.backgroundColor = "grey";
+            square.classList.add("sunkShipColor");
           }
         }
       }
@@ -226,9 +226,9 @@ function createPlayerBoardSmall(p) {
       playerSquare.dataset.id = `${i},${j}`;
 
       if (p.gb.board[i][j] != undefined) {
-        playerSquare.style.backgroundColor = "#4d1e68";
+        playerSquare.classList.add("shipColor");
         if (p.gb.board[i][j].isSunk()) {
-          playerSquare.style.backgroundColor = "grey";
+          playerSquare.classList.add("sunkShipColor");
         }
       }
 
@@ -257,7 +257,7 @@ function createPlayerBoard(p) {
       playerSquare.dataset.id = `${i},${j}`;
 
       if (p.gb.board[i][j] != undefined) {
-        playerSquare.style.backgroundColor = "#4d1e68";
+        playerSquare.classList.add("shipColor");
       }
 
       playerBoard.appendChild(playerSquare);

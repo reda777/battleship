@@ -7,14 +7,6 @@
 }
 
 @font-face {
-    font-family: 'action_man_extendedregular';
-    src: url('fonts/actionmanextended_regular_macroman/Action_Man_Extended-webfont.woff') format('woff'),
-        url('fonts/actionmanextended_regular_macroman/Action_Man_Extended-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
     font-family: 'permanent_markerregular';
     src: url('fonts/permanentmarker_regular_macroman/PermanentMarker-webfont.woff') format('woff'),
         url('fonts/permanentmarker_regular_macroman/PermanentMarker-webfont.ttf') format('truetype');
@@ -26,14 +18,6 @@
     font-family: 'sf_arch_rivalregular';
     src: url('fonts/sfarchrival_regular_macroman/SF_Arch_Rival-webfont.woff') format('woff'),
         url('fonts/sfarchrival_regular_macroman/SF_Arch_Rival-webfont.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'sf_arch_rival_extendedregular';
-    src: url('fonts/sfarchrivalextended_regular_macroman/SF_Arch_Rival_Extended-webfont.woff') format('woff'),
-        url('fonts/sfarchrivalextended_regular_macroman/SF_Arch_Rival_Extended-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -50,18 +34,28 @@
     --pve-btn-bg-hover-color: #a32828;
     --btn-text-color: #fffcf0;
     --theme-content-border-color: #151616;
+    --placing-ship-hover-color: #b6b6b6;
+    --ship-color: #7c479b;
+    --sunk-ship-color: #8d8d8d;
+    --hit-url: url(images/x-symbol.svg);
 }
 
 .darkTheme {
     --main-bg-color: #121212;
-    --main-font-color: #d4cdb1;
+    --main-font-color: #ebe5d1;
     --pvp-btn-bg-color: #233a86;
     --pve-btn-bg-color: #6b1a1a;
-    --ui-btn-bg-color: #a275af;
+    --ui-btn-bg-color: #4d1e68;
     --ui-btn-bg-hover-color: #752f9e;
+    --ui-btn-bg-selected-color: #240d31;
     --pvp-btn-bg-hover-color: #2d4baf;
     --pve-btn-bg-hover-color: #a32828;
-    --btn-text-color: #d4cdb1;
+    --btn-text-color: #ebe5d1;
+    --theme-content-border-color: #151616;
+    --placing-ship-hover-color: #b6b6b6;
+    --ship-color: #7c479b;
+    --sunk-ship-color: #8d8d8d;
+    --hit-url: url(images/x-symbol2.svg);
 }
 
 body {
@@ -69,6 +63,8 @@ body {
     min-height: 100vh;
     display: flex;
     background-color: var(--main-bg-color);
+    color: var(--main-font-color);
+    font-family: 'permanent_markerregular';
 }
 
 /*left*/
@@ -78,8 +74,6 @@ body {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    font-family: 'permanent_markerregular';
-    color: var(--main-font-color);
 }
 
 .header {
@@ -155,13 +149,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-family: 'permanent_markerregular';
 }
-
-.displayNon {
-    display: none;
-}
-
 
 .boards {
     width: 100%;
@@ -188,6 +176,8 @@ body {
     height: 30px;
     margin-bottom: 10px;
     font-size: 24px;
+    font-family: 'action_manregular';
+    font-weight: 900;
 }
 
 .playerBoardSmall {
@@ -199,7 +189,7 @@ body {
 
 .square,
 .playerSquare {
-    border: 1px solid black;
+    border: 1px solid var(--main-font-color);
 }
 
 .playerBoardSmall [data-id="0,0"],
@@ -229,25 +219,25 @@ body {
 .playerBoardSmall [data-id^="0,"],
 .gameBoard [data-id^="0,"],
 .playerBoard [data-id^="0,"] {
-    border-left: 2px solid black;
+    border-left: 2px solid var(--main-font-color);
 }
 
 .playerBoardSmall [data-id$=",0"],
 .gameBoard [data-id$=",0"],
 .playerBoard [data-id$=",0"] {
-    border-top: 2px solid black;
+    border-top: 2px solid var(--main-font-color);
 }
 
 .playerBoardSmall [data-id$=",9"],
 .gameBoard [data-id$=",9"],
 .playerBoard [data-id$=",9"] {
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid var(--main-font-color);
 }
 
 .playerBoardSmall [data-id^="9,"],
 .gameBoard [data-id^="9,"],
 .playerBoard [data-id^="9,"] {
-    border-right: 2px solid black;
+    border-right: 2px solid var(--main-font-color);
 }
 
 .gameBoard,
@@ -294,8 +284,8 @@ body {
 .content {
     display: flex;
     flex-wrap: wrap;
-    background-color: rgb(88, 24, 126);
     width: 100%;
+    background-color: var(--ui-btn-bg-color);
 }
 
 .shipContainer {
@@ -322,11 +312,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-
 }
 
 .art {
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -337,11 +325,19 @@ body {
 
 .squareStyled {
     cursor: pointer;
-    background-color: rgb(238, 225, 206);
+    background-color: var(--placing-ship-hover-color);
 }
 
 .hitSquare,
 .hitPlayerSquareSmall {
-    background: url(images/x-symbol.svg);
+    background: var(--hit-url);
     background-size: contain;
+}
+
+.shipColor {
+    background-color: var(--ship-color);
+}
+
+.sunkShipColor {
+    background-color: var(--sunk-ship-color);
 }
