@@ -167,6 +167,18 @@ function createGameBoard(p) {
     }
   }
 }
+function emptyBoardsClass() {
+  const boards = document.querySelector(".boards");
+  boards.innerHTML = "";
+}
+function emptyPickshipClass() {
+  const pickShip = document.querySelector(".pickShip");
+  pickShip.innerHTML = "";
+}
+function emptyMessageClass() {
+  const message = document.querySelector(".message");
+  message.innerHTML = "";
+}
 function announceWinner(cpuWon = false) {
   if (cpuWon) {
     showMainMessage("You Lose");
@@ -248,4 +260,7 @@ export {
   showMessage,
   createShipsToPick,
   showMainMessage,
+  emptyBoardsClass,
+  emptyPickshipClass,
+  emptyMessageClass,
 };

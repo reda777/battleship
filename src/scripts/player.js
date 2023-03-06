@@ -1,10 +1,46 @@
-function makeRandomPlay(p) {
-  let cords = createRandomNonHitCords();
-  while (p.gb.receiveAttack(cords.cordX, cords.cordY) == false) {
-    cords = createRandomNonHitCords();
+function makeRandomPlay(p, againCoords) {
+  if (againCoords == null) {
+    let cords = createRandomNonHitCords();
+    while (p.gb.receiveAttack(cords.cordX, cords.cordY) == false) {
+      cords = createRandomNonHitCords();
+    }
+    return cords;
+  } else {
+    let cords = againCoords;
+    let beta = shuffleArray([
+      [1, 0],
+      [-1, 0],
+      [0, 1],
+      [0, -1],
+    ]);
+    for (let i = 0; i < 4; i++) {
+      if (
+        cords.cordX + beta[i][0] <= 9 &&
+        cords.cordY + beta[i][1] <= 9 &&
+        cords.cordX + beta[i][0] >= 0 &&
+        cords.cordY + beta[i][1] >= 0 &&
+        p.gb.receiveAttack(
+          cords.cordX + beta[i][0],
+          cords.cordY + beta[i][1]
+        ) == true
+      ) {
+        return {
+          cordX: cords.cordX + beta[i][0],
+          cordY: cords.cordY + beta[i][1],
+        };
+      }
+    }
+    return null;
   }
-  return cords;
 }
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
 function createRandomNonHitCords() {
   let cordX = Math.floor(Math.random() * 10);
   let cordY = Math.floor(Math.random() * 10);

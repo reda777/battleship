@@ -5,10 +5,17 @@ function array2D(n) {
 }
 function Gameboard(d = 10) {
   return {
-    shipsCount: { twoWide: 2, threeWide: 2, fourWide: 1, fiveWide: 1 },
+    shipsCount: { twoWide: 3, threeWide: 3, fourWide: 3, fiveWide: 3 },
     dim: d,
     board: array2D(d),
     hitCords: [],
+    checkHitCords(x, y) {
+      const hitCords = this.hitCords;
+      for (let i = 0; i < hitCords.length; i++) {
+        if (hitCords[i][0] == x && hitCords[i][1] == y) return true;
+      }
+      return false;
+    },
     checkEmptyCoords(cordA, cordB, cordC, cordD) {
       if (cordA == cordC) {
         let i = cordB;
@@ -49,10 +56,8 @@ function Gameboard(d = 10) {
     receiveAttack(cordX, cordY) {
       let cordArr = [cordX, cordY];
       let square = this.board[cordX][cordY];
-      for (let i = 0; i < this.hitCords.length; i++) {
-        if (this.hitCords[i][0] == cordX && this.hitCords[i][1] == cordY)
-          return false;
-      }
+      //check if coords already hit
+      if (this.checkHitCords(cordX, cordY)) return false;
       if (square != undefined) {
         square.hit();
         this.hitCords.push(cordArr);

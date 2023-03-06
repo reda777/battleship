@@ -10,6 +10,9 @@ import {
   showMessage,
   createShipsToPick,
   showMainMessage,
+  emptyBoardsClass,
+  emptyPickshipClass,
+  emptyMessageClass,
 } from "./siteDOM.js";
 import { Gameboard } from "./gameboard.js";
 import { Ship } from "./ship.js";
@@ -41,13 +44,6 @@ function main() {
   pvpBtn.addEventListener("click", startPvpGame);
   pveBtn.addEventListener("click", startPveGame);
 }
-function checkHitCords(p, x, y) {
-  const hitCords = p.gb.hitCords;
-  for (let i = 0; i < hitCords.length; i++) {
-    if (hitCords[i][0] == x && hitCords[i][1] == y) return true;
-  }
-  return false;
-}
 function startPvpGame() {
   //create players
   const players = createPvpPlayers();
@@ -77,7 +73,6 @@ function placeShipLoopPvp(players, playerName) {
   //create pick ship event
   pickShipEvents(players);
 }
-
 function pickShipEvents(p) {
   let currentPlayer = p.p1;
   let finishBtnFunction = passDeviceToPlaceShips;
@@ -230,18 +225,6 @@ function finishBtnStartPvpLoop(p) {
 
   pvpLoop(p.p1, p.p2);
 }
-function emptyBoardsClass() {
-  const boards = document.querySelector(".boards");
-  boards.innerHTML = "";
-}
-function emptyPickshipClass() {
-  const pickShip = document.querySelector(".pickShip");
-  pickShip.innerHTML = "";
-}
-function emptyMessageClass() {
-  const message = document.querySelector(".message");
-  message.innerHTML = "";
-}
 function mouseoverSquare(e) {
   if (e.target.classList.contains("hitSquare")) return;
   e.target.classList.toggle("squareStyled");
@@ -273,7 +256,7 @@ function playerPlay(p1, p2) {
     //get clicked cords from the element's data-id
     const cords = e.target.dataset.id;
     if (cords != null) {
-      const checkCords = checkHitCords(p2, cords[0], cords[2]);
+      const checkCords = p2.gb.checkHitCords(cords[0], cords[2]);
       if (checkCords == false) {
         //send attack to the enemy
         p2.gb.receiveAttack(cords[0], cords[2]);
@@ -476,7 +459,6 @@ function pveLoop(p1, p2) {
     pveComputerPlay(p1, p2);
   }
 }
-
 function playerPlayPve(p1, p2) {
   //remove current page
   emptyBoardsClass();
@@ -496,7 +478,7 @@ function playerPlayPve(p1, p2) {
     const cords = e.target.dataset.id;
     //check if player clicked a square in gameboard
     if (cords != null) {
-      const checkCords = checkHitCords(p2, cords[0], cords[2]);
+      const checkCords = p2.gb.checkHitCords(cords[0], cords[2]);
       if (checkCords == false) {
         //send attack to the enemy
         p2.gb.receiveAttack(cords[0], cords[2]);
@@ -542,8 +524,7 @@ function playerPlayPve(p1, p2) {
     }
   }
 }
-
-function pveComputerPlay(p1, p2) {
+function pveComputerPlay(p1, p2, againCoords = null) {
   //remove current page
   emptyBoardsClass();
   //create enemy board and player board
@@ -551,8 +532,13 @@ function pveComputerPlay(p1, p2) {
   createGameBoard(p1);
   //random attack, save cords
   let cords;
-  cords = p2.randomPlay(p1);
+  cords = p2.randomPlay(p1, againCoords);
+  if (cords == null) {
+    pveComputerPlay(p1, p2, cords);
+    return;
+  }
   //select the attack square
+  console.log(cords);
   const cpuSquare = document.querySelector(
     `.gameBoard [data-id='${cords.cordX},${cords.cordY}']`
   );
@@ -574,13 +560,12 @@ function pveComputerPlay(p1, p2) {
       cpuSquare.style.backgroundColor = "red";
     }
     //play again
-    pveComputerPlay(p1, p2);
+    pveComputerPlay(p1, p2, cords);
   } else {
     p2.switchTurn(p1);
     pveLoop(p1, p2);
   }
 }
-
 function changeSunkShipColor(p, ship) {
   const gameBoardDiv = document.querySelector(".gameBoard");
   let shipArr = [];
@@ -597,5 +582,4 @@ function changeSunkShipColor(p, ship) {
     ).style.backgroundColor = "grey";
   }
 }
-
-export { main, changeSunkShipColor };
+export { main };
