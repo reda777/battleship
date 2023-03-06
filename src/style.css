@@ -22,6 +22,8 @@
     font-style: normal;
 }
 
+
+
 .lightTheme {
     --main-bg-color: #fffcf0;
     --main-font-color: #202020;
@@ -58,9 +60,14 @@
     --hit-url: url(images/x-symbol2.svg);
 }
 
+html,
 body {
+    height: 100%;
+    width: 100%;
     margin: 0;
-    min-height: 100vh;
+}
+
+body {
     display: flex;
     background-color: var(--main-bg-color);
     color: var(--main-font-color);
@@ -69,7 +76,7 @@ body {
 
 /*left*/
 .left {
-    width: 30%;
+    width: 30vw;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -144,7 +151,7 @@ body {
 
 /*right*/
 .right {
-    width: 70%;
+    width: 70vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -248,12 +255,12 @@ body {
     grid-template-rows: repeat(10, 50px);
 }
 
+/*pick ship*/
 .pickShip {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 90%;
     margin-top: 10px;
-    margin-left: 10px;
     overflow: hidden;
     border-radius: 5px;
     color: var(--btn-text-color);
@@ -341,3 +348,49 @@ body {
 .sunkShipColor {
     background-color: var(--sunk-ship-color);
 }
+
+/* Mobile devices */
+@media only screen and (max-width: 600px) {
+    body {
+        flex-direction: column;
+    }
+
+    .right {
+        width: 100%;
+    }
+
+    .left {
+        width: 100%;
+    }
+
+    .boards {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .gameBoard,
+    .playerBoard {
+        grid-template-columns: repeat(10, calc(calc(100vw - 20px) / 10));
+        grid-template-rows: repeat(10, calc(calc(100vw - 20px) / 10));
+    }
+}
+
+/* Tablets and small desktops */
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+    body {
+        flex-direction: column;
+    }
+
+    .right {
+        width: 100%;
+    }
+
+    .left {
+        width: 100%;
+    }
+}
+
+/* Large desktops */
+@media only screen and (min-width: 1025px) {}
